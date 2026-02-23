@@ -30,108 +30,143 @@ $imagesJson = json_encode($images);
 include 'includes/header.php'; 
 ?>
 
-    <section class="articlePresentation">
-        <div class="articlePresentationImg" aria-live="polite" aria-atomic="true">
-            <button id="prevBtn" class="previousImgArticlePresentation" aria-label="Image précédente">&lt;</button>
-            
-            <img id="ImgCarousel" src="<?php echo htmlspecialchars($images[0] ?? 'img/default.jpg'); ?>" alt="<?php echo htmlspecialchars($article['name']); ?>">
-            
-            <button id="nextBtn" class="nextImgArticlePresentation" aria-label="Image suivante">&gt;</button>
+    <section class="articlePageContainer">
+        <!-- Colonne de gauche : Grille d'images -->
+        <div class="articleImagesGrid">
+            <?php 
+            if (!empty($images)) {
+                // If there are exactly 5 images, the layout in the image looks like 2x2 + 1 bottom left.
+                // It can be just a flex or grid.
+                foreach ($images as $imgUrl) {
+                    echo '<div class="gridImageWrapper"><img src="' . htmlspecialchars($imgUrl) . '" alt="' . htmlspecialchars($article['name']) . '"></div>';
+                }
+                // To match the mockup visually, we might need placeholders if not enough images
+                $missing = 5 - count($images);
+                if ($missing > 0 && count($images) > 0) {
+                    for($i=0; $i<$missing; $i++) {
+                        echo '<div class="gridImageWrapper placeholderImage"></div>';
+                    }
+                }
+            } else {
+                for($i=0; $i<5; $i++) {
+                    echo '<div class="gridImageWrapper placeholderImage"></div>';
+                }
+            }
+            ?>
         </div>
 
-        <div class="articlePresentationDescription">
-            <h2 class="titleArticlePresentation"><?php echo nl2br(htmlspecialchars($article['name'])); ?></h2>
-            
-            <p class="priceArticlePresentation"><strong><?php echo number_format($article['price'], 2, ',', ' '); ?>€</strong></p>
+        <!-- Colonne de droite : Détails collants -->
+        <div class="articleDetailsStickyContainer">
+            <div class="articleDetailsSticky">
+                <h1 class="productTitle"><?php echo nl2br(htmlspecialchars($article['name'])); ?></h1>
+                <p class="productPrice"><?php echo number_format($article['price'], 2, ',', ' '); ?> EUR</p>
+                
+                <p class="productVendor">VENDU PAR RESIDUE_</p>
 
-            <div class="sizeArticlePresentation">
-                <button class="sizeArticle" id="sizeArticleS" onclick="selectSize(this)" aria-pressed="false">S</button>
-                <button class="sizeArticle" id="sizeArticleM" onclick="selectSize(this)" aria-pressed="false">M</button>
-                <button class="sizeArticle" id="sizeArticleL" onclick="selectSize(this)" aria-pressed="false">L</button>
-                <button class="sizeArticle" id="sizeArticleXL" onclick="selectSize(this)" aria-pressed="false">XL</button>
-            </div>
+                <div class="productOptions">
+                    <p class="optionLabel">COULEUR : NOIR</p>
+                    <div class="colorSwatches">
+                        <button class="swatch white selected" aria-label="Blanc"></button>
+                        <button class="swatch navy" aria-label="Bleu marine"></button>
+                        <button class="swatch pink" aria-label="Rose"></button>
+                        <button class="swatch darkred" aria-label="Bordeaux"></button>
+                        <button class="swatch black" aria-label="Noir"></button>
+                    </div>
 
-            <a href="./error.php" class="buyArticlePresentation">Acheter</a>
+                    <p class="optionLabel" style="margin-top: 2rem;">TAILLE</p>
+                    <div class="sizeOptions">
+                        <button class="sizeBtn">XS</button>
+                        <button class="sizeBtn">S</button>
+                        <button class="sizeBtn">M</button>
+                        <button class="sizeBtn">L</button>
+                        <button class="sizeBtn">XL</button>
+                    </div>
+                </div>
 
-            <p class="descriptionArticlePresentation"><?php echo nl2br(htmlspecialchars($article['description'])); ?></p>
+                <div class="productActions">
+                    <button class="btnAddToCart">AJOUTER AU PANIER</button>
+                    <button class="btnAddToFav">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 
+                        AJOUTER AUX FAVORIS
+                    </button>
+                </div>
 
-            <div class="detailArticlePresentation" id="definitions">
-                <h3>Détails du produit :</h3>
-                <dl>
-                    <dt>Composition</dt>
-                    <dd>100 % coton</dd>
+                <div class="productAccordions">
+                    <details class="accordion">
+                        <summary>DÉTAILS DU PRODUIT <span class="icon">+</span></summary>
+                        <div class="accordionContent">
+                            <p><?php echo nl2br(htmlspecialchars($article['description'])); ?></p>
+                            <dl>
+                                <dt>Composition</dt><dd>100 % coton</dd>
+                                <dt>Texture</dt><dd>Matières épaisses</dd>
+                                <dt>Coupe</dt><dd>Oversize et carrée</dd>
+                                <dt>Finition</dt><dd>Logo brodé</dd>
+                                <dt>Couleur principale</dt><dd>Noir</dd>
+                                <dt>Disponibilité</dt><dd>Prêt à expédier</dd>
+                                <dt>Livraison</dt><dd>Internationale</dd>
+                            </dl>
+                        </div>
+                    </details>
 
-                    <dt>Texture</dt>
-                    <dd>Matières épaisses</dd>
-
-                    <dt>Coupe</dt>
-                    <dd>Oversize et carrée</dd>
-
-                    <dt>Finition</dt>
-                    <dd>Logo brodé</dd>
-
-                    <dt>Couleur principale</dt>
-                    <dd>Noir</dd>
-
-                    <dt>Disponibilité</dt>
-                    <dd>Prêt à expédier</dd>
-
-                    <dt>Livraison</dt>
-                    <dd>Internationale</dd>
-                </dl>
+                    <details class="accordion">
+                        <summary>CHARTE DES TAILLES <span class="icon">+</span></summary>
+                        <div class="accordionContent">
+                            <p>Guide des tailles non disponible pour le moment.</p>
+                        </div>
+                    </details>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="factoryPresentation">
-
-        <video class="videoPresentationFactory" controls>
-        <source src="./video/videoPresentationUsine.mp4" type="video/mp4">
-        <track 
-            src="./video/sous-titre.vtt" 
-            kind="subtitles" 
-            srclang="fr" 
-            label="Français" 
-            default>
-        Votre navigateur ne supporte pas la balise vidéo.
-        </video>
-
-        <div class="DescriptionFactoryPresentation">
-            <div class="titleDescriptionFactory">
-                <h2>Découvrez notre usine</h2>
-                <h3>Réalisation 100% française</h3>
-            </div>
-            <p>Chez <strong>RESIDUE_</strong>, nous croyons que la qualité naît de la proximité. C'est pourquoi nous avons choisi de 
-                confier notre production à un atelier à taille humaine situé en France. Loin des cadences industrielles, 
-                chaque pièce est façonnée avec soin par des artisans passionnés, garantissant des finitions irréprochables et 
-                un respect total du produit.</p>
+    <!-- Section Suggestions -->
+    <section class="suggestionsSection">
+        <h3 class="suggestionsTitle">SUGGESTIONS</h3>
+        <div class="suggestionsGrid">
+            <?php 
+            for($i=0; $i<5; $i++): 
+            ?>
+            <a href="#" class="suggestionCardFake">
+                <div class="suggestionImagePlaceholder"></div>
+                <div class="suggestionInfo">
+                    <p class="suggestionName">TITRE DE L'ARTICLE</p>
+                    <p class="suggestionPrice">XX EUR</p>
+                    <div class="suggestionColors">
+                        <span class="dot" style="background-color: darkred;"></span>
+                        <span class="dot" style="background-color: navy;"></span>
+                        <span class="dot" style="background-color: black;"></span>
+                    </div>
+                </div>
+            </a>
+            <?php endfor; ?>
         </div>
     </section>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    // On récupère le tableau d'images généré par PHP
-    const articleImages = <?php echo $imagesJson; ?>;
-    let currentImageIndex = 0;
-
-    const imgElement = document.getElementById("ImgCarousel");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    if(prevBtn && nextBtn && imgElement && articleImages.length > 0) {
-        
-        // Clic sur Précédent
-        prevBtn.addEventListener("click", () => {
-            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : articleImages.length - 1;
-            imgElement.src = articleImages[currentImageIndex];
+    // Gestion des tailles
+    const sizeBtns = document.querySelectorAll('.sizeBtn');
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sizeBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
         });
+    });
 
-        // Clic sur Suivant
-        nextBtn.addEventListener("click", () => {
-            currentImageIndex = (currentImageIndex < articleImages.length - 1) ? currentImageIndex + 1 : 0;
-            imgElement.src = articleImages[currentImageIndex];
+    // Gestion de l'icône de l'accordéon (+ / -)
+    const accordions = document.querySelectorAll('.accordion');
+    accordions.forEach(acc => {
+        acc.addEventListener('click', (e) => {
+            // on details click, toggle icon. Details toggles after click event.
+            // Using a short timeout to check open state after toggle
+            setTimeout(() => {
+                const icon = acc.querySelector('.icon');
+                if (icon) {
+                    icon.textContent = acc.open ? '-' : '+';
+                }
+            }, 10);
         });
-    }
+    });
 });
 </script>
 
