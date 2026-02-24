@@ -28,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $category = mysqli_real_escape_string($mysqli, $_POST['category']);
 
         // Mettre à jour (seulement si l'utilisateur est l'auteur ou admin)
-        $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+        $isAdmin = (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') ? 1 : 0;
         
-        $checkAuth = $mysqli->query("SELECT id FROM article WHERE id=$article_id AND (author_id=$user_id OR $isAdmin)");
+        $checkAuth = $mysqli->query("SELECT id FROM article WHERE id=$article_id AND (author_id=$user_id OR $isAdmin=1)");
         if ($checkAuth->num_rows > 0) {
             $stmt = $mysqli->prepare("UPDATE article SET name=?, description=?, price=?, category=? WHERE id=?");
             $stmt->bind_param("ssdsi", $name, $description, $price, $category, $article_id);
@@ -47,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Si on supprime l'article
     elseif (isset($_POST['action']) && $_POST['action'] === 'delete_article') {
         $article_id = intval($_POST['article_id']);
-        $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+        $isAdmin = (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') ? 1 : 0;
         
-        $checkAuth = $mysqli->query("SELECT id FROM article WHERE id=$article_id AND (author_id=$user_id OR $isAdmin)");
+        $checkAuth = $mysqli->query("SELECT id FROM article WHERE id=$article_id AND (author_id=$user_id OR $isAdmin=1)");
         if ($checkAuth->num_rows > 0) {
             $mysqli->query("DELETE FROM article WHERE id=$article_id");
             header("Location: account.php");

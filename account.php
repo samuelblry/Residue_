@@ -103,7 +103,7 @@ include 'includes/header.php';
 
     <div style="margin-bottom: 3rem;">
         <h2 style="font-size: 1.2rem; text-transform: uppercase; margin-bottom: 1rem; border-bottom: 2px solid #e7e5e4; padding-bottom: 0.5rem;">Mes Articles en Vente</h2>
-        <a href="sell.php" style="display: inline-block; margin-bottom: 1rem; text-decoration: underline; font-weight: bold;">+ Mettre un article en vente</a>
+        <a href="add_article.php" style="display: inline-block; margin-bottom: 1rem; text-decoration: underline; font-weight: bold;">+ Mettre un article en vente</a>
         
         <?php if(!empty($articlesVendus)): ?>
             <ul style="list-style: none; padding: 0;">

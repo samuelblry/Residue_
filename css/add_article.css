@@ -1,0 +1,388 @@
+.addArticleContainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 150px 50px 100px 50px;
+    background-color: #f4f4f0;
+    color: #111;
+    font-family: 'Inter', sans-serif;
+}
+
+.addArticleMainTitle {
+    font-size: 1.35rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    letter-spacing: 0em;
+}
+
+.addArticleGrid {
+    display: flex;
+    gap: 10%;
+    margin-bottom: 5rem;
+}
+
+.addArticleLeft {
+    flex: 1;
+    max-width: 45%;
+}
+
+.articleImagesGrid {
+    /* La grille sera activée par JS une fois qu'il y aura des images */
+    display: block;
+}
+
+/* Quand la grille est activée par JS */
+.articleImagesGrid[style*="display: grid"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.gridImageWrapper {
+    background-color: #d1d5db;
+    aspect-ratio: 3/4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.placeholderImage {
+    background-color: #e5e7eb;
+}
+
+/* Bouton pour retirer une image uploadée (Affiché au survol) */
+.removeImageBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, background-color 0.2s;
+    z-index: 10;
+}
+
+.gridImageWrapper:hover .removeImageBtn {
+    opacity: 1;
+}
+
+.removeImageBtn:hover {
+    background: rgba(220, 38, 38, 0.9);
+    /* Rouge vif au survol du bouton */
+}
+
+.imageDropzone {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.imageDropzone:hover {
+    background-color: #9ca3af;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.dropzoneContent svg {
+    color: #fff;
+    /* La taille sera de 60x60 par défaut (Solo), ou pilotée par le JS/inline */
+}
+
+.soloDropzone {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background-color: #d1d5db;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.soloDropzone svg {
+    width: 60px;
+    height: 60px;
+}
+
+.addArticleRight {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+}
+
+.editGroup {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.editableInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    color: #111;
+    width: 60%;
+    /* Pas toute la largeur par défaut */
+}
+
+.editableInput::placeholder {
+    color: #111;
+}
+
+.titleInput {
+    font-size: 1rem;
+    font-weight: 900;
+}
+
+.priceWrapper {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 2rem;
+}
+
+.priceInput {
+    font-size: 0.9rem;
+    font-weight: 700;
+    width: auto;
+    min-width: 40px;
+    margin-bottom: 0;
+}
+
+/* Enlever les flèches des inputs number sur webkit/firefox */
+.priceInput::-webkit-outer-spin-button,
+.priceInput::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.priceInput[type=number] {
+    -moz-appearance: textfield;
+}
+
+.currencySuffix {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.editIcon {
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #111;
+}
+
+.topAlign {
+    align-self: flex-start;
+    margin-top: 5px;
+}
+
+.vendorInfo {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    letter-spacing: 0.1em;
+}
+
+.vendorInfo strong {
+    font-weight: 900;
+}
+
+.formSection {
+    margin-bottom: 2rem;
+}
+
+.sectionHeader {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.selectedValue {
+    margin-left: 0.5rem;
+}
+
+.categorySelect {
+    width: 60%;
+    margin-top: 0.5rem;
+    background: transparent;
+    border: 1px solid #737373;
+    padding: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #111;
+    outline: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.addBtnSquare {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #737373;
+    background: transparent;
+    font-size: 1.25rem;
+    color: #737373;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.addBtnSquare:hover {
+    border-color: #111;
+    color: #111;
+}
+
+.stockLine {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.stockSize {
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+    min-width: 30px;
+}
+
+.stockInput {
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 150px;
+}
+
+.actionButtonsPlaceholder {
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.greyPlaceholder {
+    height: 48px;
+    background-color: #737373;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.greyPlaceholder:last-child {
+    margin-bottom: 0;
+}
+
+.accordion {
+    border-top: 1px solid #111;
+}
+
+.accordion:last-child {
+    border-bottom: 1px solid #111;
+}
+
+.accordionHeader {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.accordionContent {
+    display: none;
+    padding-bottom: 1rem;
+}
+
+.accordionContent.open {
+    display: block;
+}
+
+.descInput {
+    resize: none;
+    height: 40px;
+    font-size: 0.70rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: 90%;
+}
+
+.addArticleActions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+.actionBtn {
+    padding: 1rem 3rem;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.cancelBtn {
+    border: 1px solid #dc2626;
+    /* Bordure rouge comme le texte */
+    background: transparent;
+    color: #dc2626;
+    padding: 0.75rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crossIcon {
+    margin-right: 0.5rem;
+    font-weight: bold;
+}
+
+.cancelBtn:hover {
+    background-color: #fee2e2;
+    border-color: #dc2626;
+}
+
+.publishBtn {
+    background-color: #16a34a;
+    color: #fff;
+    border: 1px solid #16a34a;
+    font-weight: 700;
+}
+
+.publishBtn:hover {
+    background-color: #15803d;
+}
+
+@media (max-width: 900px) {
+    .addArticleGrid {
+        flex-direction: column;
+    }
+
+    .addArticleLeft {
+        max-width: 100%;
+        margin-bottom: 3rem;
+    }
+}
