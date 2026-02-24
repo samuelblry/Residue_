@@ -51,6 +51,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("idsss", $user_id, $total, $address, $city, $zipcode);
             $stmt->execute();
 
+            $invoice_id = $mysqli->insert_id; // On récupère l'ID de la facture nouvellement créée
+
+            // Ajouter les articles de la facture dans la table invoice_item
+            $sqlCartItems = "SELECT cart.article_id, cart.quantity, article.price FROM cart JOIN article ON cart.article_id = article.id WHERE cart.user_id = $user_id";
+            $resCartItems = $mysqli->query($sqlCartItems);
+            if ($resCartItems && $resCartItems->num_rows > 0) {
+                $stmtItem = $mysqli->prepare("INSERT INTO invoice_item (invoice_id, article_id, quantity, price) VALUES (?, ?, ?, ?)");
+                while ($cItem = $resCartItems->fetch_assoc()) {
+                    $stmtItem->bind_param("iiid", $invoice_id, $cItem['article_id'], $cItem['quantity'], $cItem['price']);
+                    $stmtItem->execute();
+                }
+            }
+
             // Vider le panier
             $mysqli->query("DELETE FROM cart WHERE user_id = $user_id");
 
@@ -71,15 +84,17 @@ include 'includes/header.php';
 
 <div class="contactContainer" style="max-width: 800px;">
     <h1 class="titleFormular">Checkout</h1>
-    
-    <?php if(!empty($error)): ?>
-        <div style="color: #dc2626; margin-bottom: 1rem; font-weight: bold; background: #fee2e2; padding: 1rem; border: 1px solid #f87171;">
+
+    <?php if (!empty($error)): ?>
+        <div
+            style="color: #dc2626; margin-bottom: 1rem; font-weight: bold; background: #fee2e2; padding: 1rem; border: 1px solid #f87171;">
             <?php echo htmlspecialchars($error); ?>
         </div>
     <?php endif; ?>
 
-    <?php if(!empty($success)): ?>
-        <div style="color: #16a34a; margin-bottom: 1rem; font-weight: bold; background: #dcfce7; padding: 1rem; border: 1px solid #4ade80;">
+    <?php if (!empty($success)): ?>
+        <div
+            style="color: #16a34a; margin-bottom: 1rem; font-weight: bold; background: #dcfce7; padding: 1rem; border: 1px solid #4ade80;">
             <?php echo htmlspecialchars($success); ?>
             <br><br>
             <a href="index.php" style="text-decoration: underline; color: #1c1917;">Retour à l'accueil</a>
@@ -87,7 +102,8 @@ include 'includes/header.php';
     <?php else: ?>
         <div style="border: 1px solid #e7e5e4; padding: 2rem; margin-bottom: 2rem;">
             <h2 style="text-transform: uppercase; font-size: 1.2rem; margin-bottom: 1rem;">Récapitulatif de la commande</h2>
-            <p style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Total à payer : <?php echo number_format($total, 2, ',', ' '); ?> €</p>
+            <p style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Total à payer :
+                <?php echo number_format($total, 2, ',', ' '); ?> €</p>
         </div>
 
         <form action="checkout.php" method="POST" class="formularContainer">

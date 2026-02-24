@@ -39,6 +39,13 @@ if ($resArticles) {
     while($row = $resArticles->fetch_assoc()) $articles[] = $row;
 }
 
+// Récupérer toutes les factures
+$resInvoices = $mysqli->query("SELECT invoice.id, invoice.transaction_date, invoice.amount, invoice.billing_address, invoice.billing_city, invoice.billing_zipcode, user.username FROM invoice JOIN user ON invoice.user_id = user.id ORDER BY invoice.transaction_date DESC");
+$invoices = [];
+if ($resInvoices) {
+    while($row = $resInvoices->fetch_assoc()) $invoices[] = $row;
+}
+
 include 'includes/header.php';
 ?>
 
@@ -115,6 +122,37 @@ include 'includes/header.php';
                 </td>
             </tr>
             <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <h2 style="text-transform: uppercase; margin-top: 3rem; margin-bottom: 1rem; border-bottom: 2px solid #1c1917; padding-bottom: 0.5rem;">Historique des Transactions (Factures)</h2>
+    <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 2rem;">
+        <thead>
+            <tr style="border-bottom: 1px solid #e7e5e4;">
+                <th style="padding: 0.5rem;">ID</th>
+                <th style="padding: 0.5rem;">Utilisateur</th>
+                <th style="padding: 0.5rem;">Date</th>
+                <th style="padding: 0.5rem;">Montant</th>
+                <th style="padding: 0.5rem;">Adresse de facturation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($invoices as $inv): ?>
+            <tr style="border-bottom: 1px solid #e7e5e4;">
+                <td style="padding: 0.5rem;"><?php echo $inv['id']; ?></td>
+                <td style="padding: 0.5rem;"><?php echo htmlspecialchars($inv['username']); ?></td>
+                <td style="padding: 0.5rem;"><?php echo date('d/m/Y H:i', strtotime($inv['transaction_date'])); ?></td>
+                <td style="padding: 0.5rem;"><?php echo number_format($inv['amount'], 2); ?> €</td>
+                <td style="padding: 0.5rem;">
+                    <?php echo htmlspecialchars($inv['billing_address'] . ', ' . $inv['billing_zipcode'] . ' ' . $inv['billing_city']); ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php if(empty($invoices)): ?>
+            <tr>
+                <td colspan="5" style="padding: 1rem; text-align: center; color: #78716c;">Aucune transaction enregistrée.</td>
+            </tr>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
