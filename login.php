@@ -28,32 +28,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 include 'includes/header.php';
 ?>
+<div class="loginPageContainer">
+    <!-- Image de fond -->
+    <div class="loginBackground">
+        <img src="./img/background/fondMontagnes.png" alt="Paysage Montagnes Residue">
+    </div>
 
-<div class="contactContainer">
-    <h1 class="titleFormular">Connexion</h1>
-    <p class="subtitleFormular">Accédez à votre compte RESIDUE_</p>
+    <!-- Panneau vitré à droite -->
+    <div class="loginPanel">
+        <div class="loginContent">
+            <h1 class="loginTitle">CONNECTION</h1>
+            <p class="loginSubtitle">ENTREZ VOS INFORMATIONS</p>
 
-    <?php if(!empty($error)): ?>
-        <div style="color: #dc2626; margin-bottom: 1rem; font-weight: bold;">
-            <?php echo htmlspecialchars($error); ?>
+            <?php if(!empty($error)): ?>
+                <div class="loginErrorMsg">
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+            <?php endif; ?>
+
+            <form action="login.php" method="POST" class="loginForm">
+                <div class="loginFormGroup">
+                    <input type="email" id="email" name="email" placeholder="EMAIL" required>
+                </div>
+                <div class="loginFormGroup">
+                    <input type="password" id="password" name="password" placeholder="MOT DE PASSE" required>
+                </div>
+
+                <div class="loginForgotPass">
+                    <a href="#">MOT DE PASSE OUBLIÉ ?</a>
+                </div>
+                
+                <button type="submit" class="loginSubmitBtn">SE CONNECTER</button>
+            </form>
+
+            <p class="loginRegisterLink">
+                PAS DE COMPTE ? <a href="register.php">CRÉER EN UN MAINTENANT !</a>
+            </p>
         </div>
-    <?php endif; ?>
-
-    <form action="login.php" method="POST" class="formularContainer">
-        <fieldset class="contactFieldset">
-            <div class="formGroup">
-                <label for="email">Adresse E-mail</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="formGroup">
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-        </fieldset>
-        
-        <button type="submit" class="sendBtnFormular">Se connecter</button>
-    </form>
-    <p style="margin-top: 1rem;">Pas de compte ? <a href="register.php" style="font-weight: bold; text-decoration: underline;">S'inscrire</a></p>
+    </div>
 </div>
+
+<script>
+    // Permet de calculer dynamiquement la hauteur exacte du header pour que
+    // la carte en verre s'arrête obligatoirement ET parfaitement en dessous
+    function alignGlassPanel() {
+        const header = document.getElementById('navBar');
+        const panel = document.querySelector('.loginPanel');
+        
+        if (header && panel) {
+            const headerHeight = header.offsetHeight;
+            panel.style.marginTop = headerHeight + 'px';
+            panel.style.minHeight = `calc(100vh - ${headerHeight}px)`;
+            panel.style.height = 'auto'; // Permet de grandir
+        }
+    }
+
+    // Exécuter au chargement et si la taille de la fenêtre change
+    window.addEventListener('DOMContentLoaded', alignGlassPanel);
+    window.addEventListener('resize', alignGlassPanel);
+    // Petit fallback au cas où l'image ou la typo charge avec du retard
+    window.addEventListener('load', alignGlassPanel);
+</script>
 
 <?php include 'includes/footer.php'; ?>

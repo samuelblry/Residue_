@@ -15,7 +15,7 @@ if(session_status() === PHP_SESSION_NONE) session_start();
 
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
-$hasHero = in_array($currentPage, ['index.php', 'apropos.php']);
+$hasHero = in_array($currentPage, ['index.php', 'apropos.php', 'login.php', 'register.php']);
 ?>
 <body class="<?php echo $hasHero ? '' : 'page-with-nav-space'; ?>">
 
@@ -24,7 +24,7 @@ $hasHero = in_array($currentPage, ['index.php', 'apropos.php']);
             <div class="navContent">
 
                 <div class="desktopLinks">
-                    <a href="index.php" id="btnBoutiqueNav">Boutique</a>
+                    <a href="shop.php" id="btnBoutiqueNav">Boutique</a>
                     <a href="index.php" id="btnBrandNav">Collection</a>
                     <a href="contact.php" id="btnContactNav">Contact</a>
                 </div>
@@ -53,13 +53,13 @@ $hasHero = in_array($currentPage, ['index.php', 'apropos.php']);
         </div>
         <div class="navBarSecondary" id="navBarSecondary">
             <div class="navSubContent">
-                <a href="index.php">Voir tout</a>
-                <a href="index.php?category=Hoodies">Hoodies</a>
-                <a href="index.php?category=Knitwear">Knits</a>
-                <a href="index.php?category=Pantalons">Pantalons</a>
-                <a href="index.php?category=Vestes">Vestes</a>
-                <a href="index.php?category=T-shirts">T-shirts</a>
-                <a href="index.php?category=Accessoires">Accessoires</a>
+                <a href="shop.php">Voir tout</a>
+                <a href="shop.php?category=Hoodies">Hoodies</a>
+                <a href="shop.php?category=Knitwear">Knits</a>
+                <a href="shop.php?category=Pantalons">Pantalons</a>
+                <a href="shop.php?category=Vestes">Vestes</a>
+                <a href="shop.php?category=T-shirts">T-shirts</a>
+                <a href="shop.php?category=Accessoires">Accessoires</a>
             </div>
         </div>
     </nav>

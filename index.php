@@ -75,17 +75,17 @@ include 'includes/header.php';
             <div class="shopHeader">
                 <div class="shopHeaderTop">
                     <h2 class="bigTitle"><?php echo isset($_GET['q']) ? 'Pour : ' . htmlspecialchars($_GET['q']) : (isset($_GET['category']) ? htmlspecialchars($_GET['category']) : 'NOUVEAUTÉS'); ?></h2>
-                    <a href="index.php" class="filterLink">VOIR TOUT</a>
+                    <a href="shop.php" class="filterLink">VOIR TOUT</a>
                 </div>
                 <?php if (!isset($_GET['q'])): ?>
                 <div class="shopHeaderCategories">
-                    <a href="index.php" class="<?php echo !isset($_GET['category']) ? 'active' : ''; ?>">VOIR TOUT</a>
-                    <a href="index.php?category=Hoodies" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Hoodies') ? 'active' : ''; ?>">HOODIES</a>
-                    <a href="index.php?category=Knitwear" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Knitwear') ? 'active' : ''; ?>">KNITS</a>
-                    <a href="index.php?category=Pantalons" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Pantalons') ? 'active' : ''; ?>">PANTALONS</a>
-                    <a href="index.php?category=Vestes" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Vestes') ? 'active' : ''; ?>">VESTES</a>
-                    <a href="index.php?category=T-shirts" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'T-shirts') ? 'active' : ''; ?>">T-SHIRTS</a>
-                    <a href="index.php?category=Accessoires" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Accessoires') ? 'active' : ''; ?>">ACCESSOIRES</a>
+                    <a href="shop.php" class="<?php echo !isset($_GET['category']) ? 'active' : ''; ?>">VOIR TOUT</a>
+                    <a href="shop.php?category=Hoodies" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Hoodies') ? 'active' : ''; ?>">HOODIES</a>
+                    <a href="shop.php?category=Knitwear" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Knitwear') ? 'active' : ''; ?>">KNITS</a>
+                    <a href="shop.php?category=Pantalons" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Pantalons') ? 'active' : ''; ?>">PANTALONS</a>
+                    <a href="shop.php?category=Vestes" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Vestes') ? 'active' : ''; ?>">VESTES</a>
+                    <a href="shop.php?category=T-shirts" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'T-shirts') ? 'active' : ''; ?>">T-SHIRTS</a>
+                    <a href="shop.php?category=Accessoires" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Accessoires') ? 'active' : ''; ?>">ACCESSOIRES</a>
                 </div>
                 <?php endif; ?>
             </div>
@@ -114,41 +114,41 @@ include 'includes/header.php';
             </div>
             
             <div class="viewAllContainer">
-                <a href="./index.php" class="btnViewAll">VOIR TOUT</a>
+                <a href="shop.php" class="btnViewAll">VOIR TOUT</a>
             </div>
         </div>
     </section>
 
     <div class="CategoryMenu reveal">
-        <a href="./index.php?category=Hoodies" class="categoryItem">
+        <a href="shop.php?category=Hoodies" class="categoryItem">
             <div class="categoryImage">
                 <img src="./img/hoodieZipPorte.webp" alt="Hoodies">
             </div>
             <span class="categoryTitle">HOODIES</span>
         </a>
 
-        <a href="./index.php?category=Knitwear" class="categoryItem">
+        <a href="shop.php?category=Knitwear" class="categoryItem">
             <div class="categoryImage">
                 <img src="./img/knitPorte.webp" alt="Knit">
             </div>
             <span class="categoryTitle">KNIT</span>
         </a>
 
-        <a href="./index.php?category=T-shirts" class="categoryItem">
+        <a href="shop.php?category=T-shirts" class="categoryItem">
             <div class="categoryImage">
                 <img src="./img/tshirtPorte.webp" alt="T-Shirt">
             </div>
             <span class="categoryTitle">T-SHIRT</span>
         </a>
 
-        <a href="./index.php?category=Pantalons" class="categoryItem">
+        <a href="shop.php?category=Pantalons" class="categoryItem">
             <div class="categoryImage">
                 <img src="./img/pantPorte.webp" alt="Pantalon">
             </div>
             <span class="categoryTitle">PANTALON</span>
         </a>
 
-        <a href="./index.php?category=Accessoires" class="categoryItem">
+        <a href="shop.php?category=Accessoires" class="categoryItem">
             <div class="categoryImage">
                 <img src="./img/ceinturePorte.webp" alt="Accessoires">
             </div>
@@ -161,16 +161,16 @@ include 'includes/header.php';
             <div class="shopHeader">
                 <div class="shopHeaderTop">
                     <h2 class="bigTitle">BEST SELLER</h2>
-                    <a href="index.php" class="filterLink">VOIR TOUT</a>
+                    <a href="shop.php" class="filterLink">VOIR TOUT</a>
                 </div>
                 <div class="shopHeaderCategories">
-                    <a href="index.php" class="active">VOIR TOUT</a>
-                    <a href="index.php?category=Hoodies">HOODIES</a>
-                    <a href="index.php?category=Knitwear">KNITS</a>
-                    <a href="index.php?category=Pantalons">PANTALONS</a>
-                    <a href="index.php?category=Vestes">VESTES</a>
-                    <a href="index.php?category=T-shirts">T-SHIRTS</a>
-                    <a href="index.php?category=Accessoires">ACCESSOIRES</a>
+                    <a href="shop.php" class="active">VOIR TOUT</a>
+                    <a href="shop.php?category=Hoodies">HOODIES</a>
+                    <a href="shop.php?category=Knitwear">KNITS</a>
+                    <a href="shop.php?category=Pantalons">PANTALONS</a>
+                    <a href="shop.php?category=Vestes">VESTES</a>
+                    <a href="shop.php?category=T-shirts">T-SHIRTS</a>
+                    <a href="shop.php?category=Accessoires">ACCESSOIRES</a>
                 </div>
             </div>
 
@@ -196,7 +196,7 @@ include 'includes/header.php';
             </div>
 
             <div class="viewAllContainer">
-                <a href="./index.php" class="btnViewAll">VOIR TOUT</a>
+                <a href="shop.php" class="btnViewAll">VOIR TOUT</a>
             </div>
         </div>
     </section>

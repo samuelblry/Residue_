@@ -1,0 +1,214 @@
+/* =========================================
+   PAGE CONNEXION / LOGIN
+   ========================================= */
+
+body.loginPageBody {
+    /* Si besoin de cibler spécifiquement le body de cette page,
+       mais on gère via le conteneur principal à la place */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* Pour éviter le défilement si l'image dépasse */
+}
+
+.loginPageContainer {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    /* Aligne le panneau à droite */
+    align-items: flex-start;
+    /* Permet au panneau de respecter son margin-top */
+}
+
+/* Modificateur pour la page Inscription (Panneau à gauche) */
+.loginPageContainer.leftAligned {
+    justify-content: flex-start;
+}
+
+.loginBackground {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.loginBackground img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* PANNEAU VITRÉ (GLASSMORPHISM) */
+.loginPanel {
+    position: relative;
+    z-index: 2;
+    width: 50%;
+    /* Prise de la moitié de l'écran, ajustable */
+
+    /* On démarre juste en-dessous du header, et on prend le reste de la hauteur de l'écran minimum */
+    margin-top: 86px;
+    /* Réduction de la marge pour s'aligner parfaitement */
+    min-height: calc(100vh - 86px);
+    padding-bottom: 2rem;
+    /* Espace en bas pour éviter que le contenu touche le fond */
+
+    /* Le fameux effet Glassmorphism */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    /* Flou d'arrière plan */
+    -webkit-backdrop-filter: blur(15px);
+
+    /* Ombre subtile sur le bord gauche pour détacher le panneau du fond */
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Au lieu de center pour éviter la suppression du margin top lors de l'overflow */
+    align-items: center;
+    overflow-y: auto;
+    /* Scrolling interne si besoin */
+}
+
+/* Ajustement responsive pour mobile */
+@media (max-width: 900px) {
+    .loginPanel {
+        width: 100%;
+        /* Sur petit écran, le panneau prend tout l'espace */
+        backdrop-filter: blur(10px);
+    }
+}
+
+.loginContent {
+    width: 80%;
+    /* Largeur du contenu à l'intérieur du panneau */
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: auto 0;
+    /* Centrage vertical naturel */
+    padding: 4rem 0;
+    /* Marges pour respirer en haut et en bas */
+}
+
+.loginTitle {
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+}
+
+.loginSubtitle {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #e5e7eb;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.loginErrorMsg {
+    color: #fca5a5;
+    /* Rouge clair pour ressortir sur fond sombre flou */
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/* FORMULAIRE */
+.loginForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Espace entre les inputs */
+}
+
+.loginFormGroup {
+    width: 100%;
+}
+
+.loginFormGroup input {
+    width: 100%;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    padding: 0.8rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.loginFormGroup input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.loginFormGroup input:focus {
+    outline: none;
+    border-color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* LIENS & BOUTONS */
+.loginForgotPass {
+    text-align: right;
+    width: 100%;
+    margin-top: -0.5rem;
+}
+
+.loginForgotPass a {
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.loginForgotPass a:hover {
+    text-decoration: underline;
+}
+
+.loginSubmitBtn {
+    width: 100%;
+    background-color: #fff;
+    color: #1c1917;
+    /* Gris très foncé / Noir */
+    padding: 1rem;
+    border: none;
+    font-weight: 900;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+}
+
+.loginSubmitBtn:hover {
+    background-color: #e5e5e5;
+}
+
+.loginRegisterLink {
+    margin-top: 2rem;
+    font-size: 0.7rem;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.loginRegisterLink a {
+    color: #fff;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.loginRegisterLink a:hover {
+    text-decoration: underline;
+}
