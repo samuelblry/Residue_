@@ -28,6 +28,12 @@ body {
     /* We will use a custom follower */
 }
 
+/* Add padding for pages without a hero image background to avoid content hiding behind fixed nav */
+body.page-with-nav-space {
+    padding-top: 130px;
+    /* Adjust this value if navbar height changes */
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -169,54 +175,71 @@ ol {
     position: fixed;
     width: 100%;
     z-index: 40;
-    top: 34px;
-    padding: 1rem 0;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid #e7e5e4;
-    backdrop-filter: blur(30px) brightness(0.5);
-    color: #f4f4f0;
+    top: 0;
+    transition: background 0.3s ease, color 0.3s ease, padding 0.3s ease;
+    background: transparent;
+    color: #fff;
+    mix-blend-mode: difference;
 }
 
 .navBar.modeWhite {
-    top: 0;
+    background: #fff;
+    mix-blend-mode: normal;
+    color: #1c1917;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.navBar.modeWhite a {
+    color: #1c1917;
+}
+
+.navBar.modeWhite .desktopLinks a::after,
+.navBar.modeWhite .rightIcons a::after,
+.navBar.modeWhite .navSubContent a::after {
+    background-color: #1c1917;
+}
+
+.navBar.modeWhite .navBarSecondary {
+    border-color: #e7e5e4;
 }
 
 .navBarPrincipal.showMegaMenuShop,
 .navBarPrincipal.showMegaMenuBrand {
     padding-bottom: 1rem;
-    border-bottom: 1px solid #e7e5e4;
+    border-bottom: 1px solid #fff;
     margin-bottom: 3%;
 }
 
 .navContent {
     margin: 0 auto;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    transition: padding 0.3s;
+    max-width: 100%;
+    padding: 0 3rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    transition: padding 0.3s;
 }
 
 .navBar.modeWhite .navContent {
-    max-width: 1200px;
+    max-width: 100%;
+    padding: 0 3rem;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
 }
 
 .mainLogo {
-    font-size: 1.875rem;
+    font-size: 2rem;
     font-weight: 900;
     text-transform: uppercase;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    justify-self: center;
     transition: all 0.3s ease;
     cursor: pointer;
+    letter-spacing: -0.05em;
 
-    opacity: 0;
-    pointer-events: none;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .LogoFullNav {
@@ -235,10 +258,6 @@ ol {
     pointer-events: auto;
 }
 
-.mainLogo:hover {
-    transform: translateX(-50%) scale(1.05);
-}
-
 .tm {
     font-size: 10px;
     vertical-align: top;
@@ -247,6 +266,7 @@ ol {
 
 .desktopLinks {
     display: flex;
+    justify-self: start;
     gap: 2rem;
     margin: 0;
     padding-left: 0;
@@ -257,7 +277,7 @@ ol {
 .rightIcons a {
     display: block;
     text-decoration: none;
-    color: #f4f4f0;
+    color: #fff;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.875rem;
@@ -280,7 +300,7 @@ ol {
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: #f4f4f0;
+    background-color: #fff;
 
     transform: scaleX(0);
     transform-origin: center;
@@ -289,7 +309,7 @@ ol {
 
 .desktopLinks a:hover,
 .rightIcons:hover a:hover {
-    color: #f4f4f0;
+    color: #fff;
 }
 
 .desktopLinks a:hover::after,
@@ -299,6 +319,7 @@ ol {
 
 .rightIcons {
     display: flex;
+    justify-self: end;
     gap: 1.5rem;
     align-items: center;
 }
@@ -308,42 +329,47 @@ ol {
 }
 
 
-/* MEGA MENU */
-
-
-.megaMenuShop {
-    display: flex;
-
-    position: absolute;
-
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-20px);
-
-    gap: 7%;
-    flex-direction: row;
+.navBarSecondary {
     width: 100%;
-
-    top: 100%;
-    left: 0;
-
-    padding: 0 0rem;
-    transition: all 0.3s ease;
-    max-width: 1200px;
-    margin: 0 auto;
-    backdrop-filter: blur(30px) brightness(0.5);
-    text-transform: uppercase;
-    padding-top: 0;
-    margin-bottom: 2%;
-
-    z-index: 15;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    padding: 10px 0;
 }
 
-.megaMenuShop.showMegaMenuShop {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
+.navSubContent {
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 0 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navSubContent a {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
     position: relative;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navSubContent a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease-out;
+}
+
+.navSubContent a:hover::after {
+    transform: scaleX(1);
 }
 
 .principalCategory,
@@ -373,54 +399,78 @@ ol {
     position: relative;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
 
-.heroBgContainer {
+.heroLayer {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
 }
 
-.heroImg {
+.heroLayer img.heroImg {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(100%) contrast(1.25) brightness(0.75);
-    transition: transform 20s;
 }
 
-.heroSection:hover .heroImg {
-    transform: scale(1.05);
+.heroBg {
+    z-index: 1;
 }
 
-.heroContent {
+.heroContentTitle {
     position: relative;
-    z-index: 10;
+    z-index: 2;
     text-align: center;
-    color: #f4f4f0;
+    color: #fff;
+    animation: fadeUp 0.8s ease-out forwards;
+    transform: translateY(-5vh);
+}
+
+.heroContentSubtitle {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    color: #fff;
     animation: fadeUp 0.8s ease-out forwards;
 }
 
-.heroSubtitle {
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    margin-bottom: 3rem;
-    text-transform: uppercase;
-}
-
 .heroTitle {
-    font-size: 600%;
+    font-size: 12vw;
     font-weight: 900;
     line-height: 0.85;
     text-transform: uppercase;
-    margin-bottom: 2rem;
-    background: linear-gradient(to right, #e7e5e4, #8e8783);
+    margin-bottom: 0.5rem;
+    margin-top: -17vh;
+    background: linear-gradient(to bottom, #1c1917, #dc2626);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.heroFg {
+    z-index: 3;
+    pointer-events: none;
+}
+
+.heroOverlay {
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
+    z-index: 4;
 }
 
 .heroTitleAPropos {
@@ -443,16 +493,19 @@ ol {
 }
 
 .btnHeroShowNewArticle {
-    border: 1px solid #f4f4f0;
-    color: #f4f4f0;
+    display: inline-block;
+    border: 1px solid #fff;
+    color: #fff;
     padding: 1rem 2rem;
     font-weight: 700;
     text-transform: uppercase;
     transition: all 0.4s;
+    background: transparent;
+    font-size: 0.875rem;
 }
 
 .btnHeroShowNewArticle:hover {
-    background: #f4f4f0;
+    background: #fff;
     color: #1c1917;
 }
 
@@ -494,61 +547,87 @@ ol {
 
 .shopHeader {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 3rem;
+    flex-direction: column;
+    margin-bottom: 2rem;
 }
 
-.smallTitle {
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #a8a29e;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+.shopHeaderTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #e7e5e4;
+    padding-bottom: 1rem;
 }
 
 .bigTitle {
-    font-size: 2.25rem;
+    font-size: 2rem;
     font-weight: 900;
     text-transform: uppercase;
     margin-top: 0.5rem;
+    line-height: 1;
 }
 
-.seeAllLink {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.filterLink {
+    font-size: 0.875rem;
     font-weight: 700;
     text-transform: uppercase;
+    color: #a8a29e;
     text-decoration: none;
-    color: inherit;
-
-    position: relative;
-    padding-bottom: 5px;
+    transition: color 0.3s;
 }
 
-.seeAllLink::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #1c1917;
-    /* Ligne noire (car fond blanc) */
-    transform: scaleX(0);
-    transform-origin: center;
-    transition: transform 0.3s ease-out;
+.filterLink:hover {
+    color: #1c1917;
 }
 
-.seeAllLink:hover::after {
-    transform: scaleX(1);
+.shopHeaderCategories {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.shopHeaderCategories a {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #1c1917;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+}
+
+.shopHeaderCategories a.active,
+.shopHeaderCategories a:hover {
+    color: #a8a29e;
 }
 
 .productsGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 3rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+}
+
+.viewAllContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.btnViewAll {
+    display: inline-block;
+    border: 1px solid #1c1917;
+    color: #1c1917;
+    padding: 0.75rem 2rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    background: transparent;
+    transition: all 0.3s;
+}
+
+.btnViewAll:hover {
+    background: #1c1917;
+    color: #f4f4f0;
 }
 
 

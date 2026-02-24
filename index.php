@@ -1,34 +1,71 @@
 <?php 
 require_once 'includes/db.php'; 
-include 'includes/header.php'; 
 
-// 1. Requête pour récupérer tous les articles avec leur image principale (is_main = 1)
-// On les trie du plus récent au plus ancien
+// Gestion de la recherche et des catégories
+$whereClauses = [];
+$params = [];
+$types = "";
+
+if (isset($_GET['q']) && !empty(trim($_GET['q']))) {
+    $q = "%" . trim($_GET['q']) . "%";
+    $whereClauses[] = "(Article.name LIKE ? OR Article.description LIKE ?)";
+    $params[] = $q;
+    $params[] = $q;
+    $types .= "ss";
+}
+
+if (isset($_GET['category']) && !empty(trim($_GET['category']))) {
+    $cat = trim($_GET['category']);
+    $whereClauses[] = "Article.category = ?";
+    $params[] = $cat;
+    $types .= "s";
+}
+
+$whereSQL = "";
+if (!empty($whereClauses)) {
+    $whereSQL = " WHERE " . implode(" AND ", $whereClauses);
+}
+
+// Requête pour récupérer tous les articles avec leur image principale
 $sql = "SELECT Article.id, Article.name, Article.price, Image.url AS image_url 
         FROM Article 
         LEFT JOIN Image ON Article.id = Image.article_id AND Image.is_main = 1 
+        $whereSQL
         ORDER BY Article.publish_date DESC";
 
-$resultArticles = $mysqli->query($sql);
+$stmt = $mysqli->prepare($sql);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$resultArticles = $stmt->get_result();
 
-// On stocke les résultats dans un tableau pour pouvoir les réutiliser dans plusieurs sections
 $articles = [];
 if ($resultArticles && $resultArticles->num_rows > 0) {
     while($row = $resultArticles->fetch_assoc()) {
         $articles[] = $row;
     }
 }
+
+include 'includes/header.php'; 
 ?>
 
     <header class="heroSection">
-        <div class="heroBgContainer">
-            <img src="./img/bg.webp" class="heroImg" alt="Image de fond de la section">
+        <div class="heroLayer heroBg">
+            <img src="./img/background/fondNuage.png" class="heroImg" alt="Image de nuages">
         </div>
-        <div class="heroContent">
+        <div class="heroContentTitle">
             <h1 class="heroTitle">RESIDUE_</h1>
+        </div>
+        <div class="heroLayer heroFg">
+            <img src="./img/background/fondDesert.png" class="heroImg" alt="Image de désert">
+        </div>
+        <div class="heroContentSubtitle">
             <p class="heroSubtitle">no waste, just taste.</p>
+        </div>
+        <div class="heroOverlay">
             <a href="./pageArticle.php" class="btnHeroShowNewArticle"
-                aria-label="Ouvre la page des derniers ajouts">Voir les derniers ajouts</a>
+                aria-label="Ouvre la page des derniers ajouts">VOIR LES DERNIERS AJOUTS</a>
         </div>
     </header>
 
@@ -36,17 +73,21 @@ if ($resultArticles && $resultArticles->num_rows > 0) {
 
         <div class="articleNew">
             <div class="shopHeader">
-                <div>
-                    <span class="smallTitle">Nouveautés</span>
-                    <h2 class="bigTitle">Derniers ajouts</h2>
+                <div class="shopHeaderTop">
+                    <h2 class="bigTitle"><?php echo isset($_GET['q']) ? 'Pour : ' . htmlspecialchars($_GET['q']) : (isset($_GET['category']) ? htmlspecialchars($_GET['category']) : 'NOUVEAUTÉS'); ?></h2>
+                    <a href="index.php" class="filterLink">VOIR TOUT</a>
                 </div>
-                <a href="./error.php" class="seeAllLink">
-                    Tout voir
-                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                    </svg>
-                </a>
+                <?php if (!isset($_GET['q'])): ?>
+                <div class="shopHeaderCategories">
+                    <a href="index.php" class="<?php echo !isset($_GET['category']) ? 'active' : ''; ?>">VOIR TOUT</a>
+                    <a href="index.php?category=Hoodies" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Hoodies') ? 'active' : ''; ?>">HOODIES</a>
+                    <a href="index.php?category=Knitwear" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Knitwear') ? 'active' : ''; ?>">KNITS</a>
+                    <a href="index.php?category=Pantalons" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Pantalons') ? 'active' : ''; ?>">PANTALONS</a>
+                    <a href="index.php?category=Vestes" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Vestes') ? 'active' : ''; ?>">VESTES</a>
+                    <a href="index.php?category=T-shirts" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'T-shirts') ? 'active' : ''; ?>">T-SHIRTS</a>
+                    <a href="index.php?category=Accessoires" class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Accessoires') ? 'active' : ''; ?>">ACCESSOIRES</a>
+                </div>
+                <?php endif; ?>
             </div>
 
             <div class="productsGrid">
@@ -71,23 +112,66 @@ if ($resultArticles && $resultArticles->num_rows > 0) {
                     <p>Aucun article disponible pour le moment.</p>
                 <?php endif; ?>
             </div>
+            
+            <div class="viewAllContainer">
+                <a href="./index.php" class="btnViewAll">VOIR TOUT</a>
+            </div>
         </div>
+    </section>
 
-        <div class="separationCategoryArticle"></div>
+    <div class="CategoryMenu reveal">
+        <a href="./index.php?category=Hoodies" class="categoryItem">
+            <div class="categoryImage">
+                <img src="./img/hoodieZipPorte.webp" alt="Hoodies">
+            </div>
+            <span class="categoryTitle">HOODIES</span>
+        </a>
 
+        <a href="./index.php?category=Knitwear" class="categoryItem">
+            <div class="categoryImage">
+                <img src="./img/knitPorte.webp" alt="Knit">
+            </div>
+            <span class="categoryTitle">KNIT</span>
+        </a>
+
+        <a href="./index.php?category=T-shirts" class="categoryItem">
+            <div class="categoryImage">
+                <img src="./img/tshirtPorte.webp" alt="T-Shirt">
+            </div>
+            <span class="categoryTitle">T-SHIRT</span>
+        </a>
+
+        <a href="./index.php?category=Pantalons" class="categoryItem">
+            <div class="categoryImage">
+                <img src="./img/pantPorte.webp" alt="Pantalon">
+            </div>
+            <span class="categoryTitle">PANTALON</span>
+        </a>
+
+        <a href="./index.php?category=Accessoires" class="categoryItem">
+            <div class="categoryImage">
+                <img src="./img/ceinturePorte.webp" alt="Accessoires">
+            </div>
+            <span class="categoryTitle">ACCESSOIRES</span>
+        </a>
+    </div>
+
+    <section class="shopSection reveal">
         <div class="articleBestSteller">
             <div class="shopHeader">
-                <div>
-                    <span class="smallTitle">Les meilleurs ventes</span>
-                    <h2 class="bigTitle">Best steller</h2>
+                <div class="shopHeaderTop">
+                    <h2 class="bigTitle">BEST SELLER</h2>
+                    <a href="index.php" class="filterLink">VOIR TOUT</a>
                 </div>
-                <a href="./error.php" class="seeAllLink">
-                    Tout voir
-                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                    </svg>
-                </a>
+                <div class="shopHeaderCategories">
+                    <a href="index.php" class="active">VOIR TOUT</a>
+                    <a href="index.php?category=Hoodies">HOODIES</a>
+                    <a href="index.php?category=Knitwear">KNITS</a>
+                    <a href="index.php?category=Pantalons">PANTALONS</a>
+                    <a href="index.php?category=Vestes">VESTES</a>
+                    <a href="index.php?category=T-shirts">T-SHIRTS</a>
+                    <a href="index.php?category=Accessoires">ACCESSOIRES</a>
+                </div>
             </div>
 
             <div class="productsGrid">
@@ -110,58 +194,11 @@ if ($resultArticles && $resultArticles->num_rows > 0) {
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
-        </div>
-    </section>
 
-    <div class="CategoryMenu reveal">
-        <a href="./error.php" class="categoryItem">
-            <div class="categoryImage">
-                <img src="./img/knitPorte.webp" alt="Knits">
-            </div>
-            <span class="categoryTitle">KNITS</span>
-        </a>
-
-        <a href="./error.php" class="categoryItem">
-            <div class="categoryImage">
-                <img src="./img/hoodieZipPorte.webp" alt="Hoodies">
-            </div>
-            <span class="categoryTitle">HOODIES</span>
-        </a>
-
-        <a href="./error.php" class="categoryItem">
-            <div class="categoryImage">
-                <img src="./img/tshirtPorte.webp" alt="T-shirts">
-            </div>
-            <span class="categoryTitle">T-SHIRTS</span>
-        </a>
-
-        <a href="./error.php" class="categoryItem">
-            <div class="categoryImage">
-                <img src="./img/pantPorte.webp" alt="Pantalons">
-            </div>
-            <span class="categoryTitle">PANTALONS</span>
-        </a>
-
-        <a href="./error.php" class="categoryItem">
-            <div class="categoryImage">
-                <img src="./img/ceinturePorte.webp" alt="Accessoires">
-            </div>
-            <span class="categoryTitle">ACCESSOIRES</span>
-        </a>
-    </div>
-
-    <section id="manifesto" class="textSection reveal">
-        <div class="textContent">
-            <div class="textLeft">
-                <h2 class="mainHeading">allez voir notre nouveau<br><span class="redWord">knit</span><br>en édition
-                    limitée !</h2>
-                <a href="./pageArticle.php" class="btnDrop" aria-label="Ouvre la page du drop">Voir le drop ici !</a>
-                <p class="paragraph">Heavy materials | Oversize | Boxy fit | Embroidery logo | 100% COTTON | Main color
-                    : BLACK |
-                    Ready to ship | Worldwide shipping</p>
+            <div class="viewAllContainer">
+                <a href="./index.php" class="btnViewAll">VOIR TOUT</a>
             </div>
         </div>
-        <img src="./img/brand/imgSocialMedia2.webp" class="backgroundSocialMedia" alt="Image de fond">
     </section>
 
 <?php include 'includes/footer.php'; ?>

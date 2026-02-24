@@ -109,8 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Navbar Scroll Effect
     window.addEventListener("scroll", () => {
-        // Only apply scroll styles if mega menu is closed
-        if (!megaMenuShop.classList.contains("showMegaMenuShop")) {
+        if (navBar) {
             if (window.scrollY > 50) {
                 navBar.classList.add("modeWhite");
                 navBar.classList.add("modeLogoVisible");

@@ -30,4 +30,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+include 'includes/header.php';
 ?>
+
+<div class="contactContainer">
+    <h1 class="titleFormular">Créer un compte</h1>
+    <p class="subtitleFormular">Rejoignez-nous pour accéder à nos dernières collections et gérer vos commandes.</p>
+
+    <?php if(!empty($error)): ?>
+        <div style="color: #dc2626; margin-bottom: 1rem; font-weight: bold;">
+            <?php echo htmlspecialchars($error); ?>
+        </div>
+    <?php endif; ?>
+
+    <form action="register.php" method="POST" class="formularContainer">
+        <fieldset class="contactFieldset">
+            <legend>Vos informations</legend>
+            <div class="formGroup">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="formGroup">
+                <label for="email">Adresse E-mail</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="formGroup">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+        </fieldset>
+        
+        <button type="submit" class="sendBtnFormular">S'inscrire</button>
+    </form>
+    <p style="margin-top: 1rem;">Déjà un compte ? <a href="login.php" style="font-weight: bold; text-decoration: underline;">Se connecter</a></p>
+</div>
+
+<?php include 'includes/footer.php'; ?>

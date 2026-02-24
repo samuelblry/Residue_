@@ -1,3 +1,6 @@
+<?php
+if(session_status() === PHP_SESSION_NONE) session_start();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -6,63 +9,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESIDUE_</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=<?php echo time(); ?>">
     <script src="js/script.js" defer></script>
 </head>
 
-<body>
-
-    <div class="topBanner">
-        <div class="scrollingText">
-            <span>Retrouve le nouveau drop dès maintenant !</span> • <span>Edition Limitée !</span> •
-        </div>
-        <div class="scrollingText">
-            <span>Retrouve le nouveau drop dès maintenant !</span> • <span>Edition Limitée !</span> •
-        </div>
-        <div class="scrollingText">
-            <span>Retrouve le nouveau drop dès maintenant !</span> • <span>Edition Limitée !</span> •
-        </div>
-    </div>
+<?php
+$currentPage = basename($_SERVER['PHP_SELF']);
+$hasHero = in_array($currentPage, ['index.php', 'apropos.php']);
+?>
+<body class="<?php echo $hasHero ? '' : 'page-with-nav-space'; ?>">
 
     <nav id="navBar" class="navBar">
         <div class="navBarPrincipal" id="navBarPrincipal">
             <div class="navContent">
 
                 <div class="desktopLinks">
-                    <a href="error.php" id="btnBoutiqueNav" aria-expanded="false" aria-controls="megaMenuShop"
-                        aria-haspopup="true">Boutique</a>
-                    <a href="error.php" id="btnBrandNav">Collections</a>
+                    <a href="index.php" id="btnBoutiqueNav">Boutique</a>
+                    <a href="index.php" id="btnBrandNav">Collection</a>
                     <a href="contact.php" id="btnContactNav">Contact</a>
                 </div>
 
                 <div class="mainLogo">
                     <a href="./index.php">
-                        RESIDUE_<span class="tm">®</span>
+                        RESIDUE_
                     </a>
                 </div>
 
-                <div class="rightIcons">
+                <div class="rightIcons" style="display: flex; align-items: center; gap: 1rem;">
                     <a href="apropos.php" id="btnAPropos">A propos</a>
-                    <a href="error.php" id="btnCompte">Compte</a>
+                    <?php if(isset($_SESSION['user_id'])): ?>
+                        <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                            <a href="admin.php">Admin</a>
+                        <?php endif; ?>
+                        <a href="account.php" id="btnCompte">Compte</a>
+                        <a href="cart.php">Panier</a>
+                        <a href="logout.php">Déconnexion</a>
+                    <?php else: ?>
+                        <a href="login.php" id="btnCompte">Compte</a>
+                        <a href="cart.php">Panier</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
-        <div class="megaMenuShop" id="megaMenuShop">
-            <div class="principalCategory">
-                <a href="error.php"><strong>Tout les articles</strong></a>
-                <a href="error.php"><strong>Nouveautés</strong></a>
-                <a href="error.php"><strong>Meilleurs ventes</strong></a>
-            </div>
-            <div class="clothingCategory">
-                <a href="error.php"><strong>Voir tout</strong></a>
-                <a href="error.php">Knitwear</a>
-                <a href="error.php">Hoodies</a>
-                <a href="error.php">T-shirts</a>
-                <a href="error.php">Pantalons</a>
-            </div>
-            <div class="accessoryCategory">
-                <a href="error.php"><strong>Voir tout</strong></a>
-                <a href="error.php">Ceinture</a>
+        <div class="navBarSecondary" id="navBarSecondary">
+            <div class="navSubContent">
+                <a href="index.php">Voir tout</a>
+                <a href="index.php?category=Hoodies">Hoodies</a>
+                <a href="index.php?category=Knitwear">Knits</a>
+                <a href="index.php?category=Pantalons">Pantalons</a>
+                <a href="index.php?category=Vestes">Vestes</a>
+                <a href="index.php?category=T-shirts">T-shirts</a>
+                <a href="index.php?category=Accessoires">Accessoires</a>
             </div>
         </div>
     </nav>
