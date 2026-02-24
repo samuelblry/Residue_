@@ -1,7 +1,7 @@
 .addArticleContainer {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 150px 50px 100px 50px;
+    padding: 0px 50px;
     background-color: #f4f4f0;
     color: #111;
     font-family: 'Inter', sans-serif;
@@ -234,6 +234,36 @@
     font-weight: 700;
 }
 
+/* Grille de sélection des tailles */
+.sizeOptionsSelect {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.sizeBtn.selectable {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d1d5db;
+    /* Gris clair par défaut (désélectionné) */
+    background: transparent;
+    font-size: 0.85rem;
+    color: #d1d5db;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.sizeBtn.selectable.selected {
+    border-color: #111;
+    color: #111;
+    font-weight: 700;
+}
+
 .addBtnSquare {
     width: 32px;
     height: 32px;
@@ -329,51 +359,53 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 2rem;
+    /* Espace entre les deux boutons */
     margin-top: 4rem;
     margin-bottom: 4rem;
 }
 
 .actionBtn {
-    padding: 1rem 3rem;
+    padding: 1rem 0;
     font-size: 0.85rem;
     font-family: 'Inter', sans-serif;
     text-transform: uppercase;
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     transition: all 0.3s;
+    min-width: 250px;
+    /* Largeur uniforme pour les deux boutons */
+    letter-spacing: 0.05em;
+    font-weight: 700;
 }
 
 .cancelBtn {
-    border: 1px solid #dc2626;
-    /* Bordure rouge comme le texte */
+    border: 1px solid #111;
     background: transparent;
-    color: #dc2626;
-    padding: 0.75rem 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: #111;
 }
 
 .crossIcon {
     margin-right: 0.5rem;
     font-weight: bold;
+    font-size: 1rem;
 }
 
 .cancelBtn:hover {
-    background-color: #fee2e2;
-    border-color: #dc2626;
+    background-color: #f3f4f6;
 }
 
 .publishBtn {
-    background-color: #16a34a;
+    background-color: #1c1917;
     color: #fff;
-    border: 1px solid #16a34a;
-    font-weight: 700;
+    border: 1px solid #1c1917;
 }
 
 .publishBtn:hover {
-    background-color: #15803d;
+    background-color: #44403c;
+    border-color: #44403c;
 }
 
 @media (max-width: 900px) {

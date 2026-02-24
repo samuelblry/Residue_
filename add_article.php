@@ -16,9 +16,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $price = floatval($_POST['price']);
     $category = isset($_POST['category']) ? mysqli_real_escape_string($mysqli, $_POST['category']) : 'Autre';
     $author_id = $_SESSION['user_id'];
+    
+    // Traitement des stocks par taille
+    $stocks = isset($_POST['stock']) ? $_POST['stock'] : [];
+    
+    // On peut avoir une validation basique : un article doit avoir au moins 1 stock dans n'importe quelle taille
+    $total_stock = 0;
+    foreach($stocks as $qty) {
+        $total_stock += intval($qty);
+    }
 
     if (empty($name) || empty($price)) {
         $error = "Veuillez remplir les champs obligatoires (Titre, Prix).";
+    } elseif ($total_stock <= 0) {
+        $error = "Veuillez définir un stock pour au moins une taille.";
     } elseif (!isset($_FILES['images']) || count($_FILES['images']['name']) === 0 || empty($_FILES['images']['name'][0])) {
         $error = "Veuillez joindre au moins une image.";
     } else {
@@ -77,6 +88,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($uploadSuccessCount > 0) {
+                // Mettre à jour le stock total calculé sur l'article
+                $stmt_stock = $mysqli->prepare("UPDATE article SET stock = ? WHERE id = ?");
+                $stmt_stock->bind_param("di", $total_stock, $article_id);
+                $stmt_stock->execute();
+                
                 $mysqli->commit();
                 $success = "L'article a été mis en vente avec succès !";
             } else {
@@ -154,6 +170,7 @@ include 'includes/header.php';
                 <select name="category" class="categorySelect" required>
                     <option value="" disabled selected>SÉLECTIONNER</option>
                     <option value="Knitwear">KNITWEAR</option>
+                    <option value="Vestes">VESTES</option>
                     <option value="Hoodies">HOODIES</option>
                     <option value="T-shirts">T-SHIRTS</option>
                     <option value="Pantalons">PANTALONS</option>
@@ -162,28 +179,37 @@ include 'includes/header.php';
                 </select>
             </div>
 
-            <div class="formSection">
-                <div class="sectionHeader">TAILLE</div>
-                <button type="button" class="addBtnSquare">+</button>
+            <div class="formSection" style="flex-direction: column; align-items: flex-start;">
+                <div class="sectionHeader" style="margin-bottom: 0.5rem; width: 100%;">TAILLES DISPONIBLES</div>
+                <div class="sizeOptionsSelect" id="sizeSelector">
+                    <button type="button" class="sizeBtn selectable" data-size="XS">XS</button>
+                    <button type="button" class="sizeBtn selectable" data-size="S">S</button>
+                    <button type="button" class="sizeBtn selectable" data-size="M">M</button>
+                    <button type="button" class="sizeBtn selectable" data-size="L">L</button>
+                    <button type="button" class="sizeBtn selectable" data-size="XL">XL</button>
+                </div>
             </div>
 
-            <div class="formSection">
-                <div class="sectionHeader">STOCK</div>
-                <!-- Une ligne par taille comme demandé -->
-                <div class="stockLine">
-                    <span class="stockSize">S</span>
-                    <input type="text" class="editableInput stockInput" value="10 EXEMPLAIRES">
-                    <span class="editIcon">✎</span>
+            <div class="formSection" style="flex-direction: column; align-items: flex-start; border-bottom: none;" id="stockSectionContainer">
+                <div class="sectionHeader" style="margin-bottom: 1rem; width: 100%;">STOCK PAR TAILLE</div>
+                
+                <div id="stockLinesWrapper" style="width: 100%;">
+                    <!-- Les lignes s'affichent ou se cachent selon les tailles sélectionnées -->
+                    <?php 
+                    $sizes = ['XS', 'S', 'M', 'L', 'XL'];
+                    foreach($sizes as $s): 
+                    ?>
+                    <div class="stockLine" id="stockLine-<?php echo $s; ?>" style="display: none; margin-bottom: 0.5rem; align-items: center; justify-content: space-between;">
+                        <span class="stockSize" style="font-weight: 700; width: 30px;"><?php echo $s; ?></span>
+                        <div style="display: flex; align-items: center; background: transparent; border-bottom: 1px solid #737373; width: 80%;">
+                            <input type="number" name="stock[<?php echo $s; ?>]" class="editableInput stockInput" value="0" min="0" style="width: 100%; border: none;">
+                            <span style="font-size: 0.7rem; color: #737373; margin-left: 5px;">EXEMPLAIRES</span>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <div class="stockLine">
-                    <span class="stockSize">M</span>
-                    <input type="text" class="editableInput stockInput" value="10 EXEMPLAIRES">
-                    <span class="editIcon">✎</span>
-                </div>
-                <div class="stockLine">
-                    <span class="stockSize">L</span>
-                    <input type="text" class="editableInput stockInput" value="10 EXEMPLAIRES">
-                    <span class="editIcon">✎</span>
+                <div id="noSizeSelectedMsg" style="font-size: 0.8rem; color: #d1d5db; font-style: italic;">
+                    Sélectionnez d'abord des tailles pour leur attribuer un stock.
                 </div>
             </div>
 
@@ -365,7 +391,37 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 2. Gestion des accordéons
+    // 2. Gestion dynamique des Tailles et Stocks
+    const sizeBtns = document.querySelectorAll('.sizeBtn.selectable');
+    const noSizeMsg = document.getElementById('noSizeSelectedMsg');
+    
+    // Fonctionnalité de sélection de taille
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('selected'); // Ajoute/retire la classe .selected (noire)
+            
+            const size = this.dataset.size;
+            const stockLine = document.getElementById('stockLine-' + size);
+            const stockInput = stockLine.querySelector('input');
+            
+            if (this.classList.contains('selected')) {
+                // Afficher la ligne de stock associée
+                stockLine.style.display = 'flex';
+                // Mettre à 1 par défaut quand on sélectionne une nouvelle taille si elle était à 0
+                if(stockInput.value === "0" || stockInput.value === "") stockInput.value = 1; 
+            } else {
+                // Cacher et remettre à 0
+                stockLine.style.display = 'none';
+                stockInput.value = 0;
+            }
+            
+            // Afficher/Cacher le message global "Sélectionnez une taille"
+            const anySelected = document.querySelectorAll('.sizeBtn.selectable.selected').length > 0;
+            noSizeMsg.style.display = anySelected ? 'none' : 'block';
+        });
+    });
+
+    // 3. Gestion des accordéons
     const accordions = document.querySelectorAll('.accordionHeader');
     accordions.forEach(acc => {
         acc.addEventListener('click', function() {
