@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 23 fév. 2026 à 17:13
+-- Généré le : mar. 24 fév. 2026 à 14:08
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -42,14 +42,14 @@ CREATE TABLE `article` (
 --
 
 INSERT INTO `article` (`id`, `name`, `description`, `price`, `publish_date`, `author_id`, `category`) VALUES
-(1, 'THE LAST DUEL KNIT', '100% cotton, matières épaisses, coupe oversize et carrée, logo brodé.', 99.95, '2026-02-23 14:25:19', 1, 'Knitwear'),
-(2, 'MINERAL DYE HOODIE', '100% coton lourd (450gsm). Coupe boxy et oversize. Délavage industriel inspiré des façades de Lisbonne. Finitions brutes et logo brodé ton sur ton.', 120.00, '2026-02-23 15:19:37', 1, 'Hoodies'),
-(3, 'INDUSTRIAL BUCKLE BELT', 'Ceinture en cuir vegan texturé motif léopard sombre. Boucle métallique massive signature RESIDUE_ inspirée de l\'architecture brutaliste.', 65.00, '2026-02-23 15:31:12', 1, 'Ceinture'),
-(4, 'NIGHTFALL ZIP HOODIE', 'Hoodie zippé bleu nuit avec détails texturés/strass. Coupe boxy et épaules tombantes. 100% coton lourd (450gsm), parfait pour la superposition.', 135.00, '2026-02-23 15:31:12', 1, 'Hoodies'),
-(5, 'RAW DENIM WIDE PANT', 'Jeans brut coupe extra-large. Surpiqûres contrastantes rouges et revers imprimés. Toile denim japonaise rigide pour une silhouette architecturale et structurée.', 150.00, '2026-02-23 15:31:12', 1, 'Pantalons'),
-(6, 'FADED SHADOW T-SHIRT', 'T-shirt oversize noir avec effet de délavage \"shadow\" au centre et sur les coutures. Coton épais 280gsm, tombé lourd et col ras du cou resserré.', 55.00, '2026-02-23 15:31:12', 1, 'T-shirts'),
-(7, 'HEAVYWEIGHT SWEATPANT', 'Jogging oversize en coton ultra-lourd (500gsm). Effet délavé industriel, taille élastique à cordon de serrage, chevilles resserrées et poches profondes. Coupe ample pensée pour le confort et l\'esthétique urbaine.', 95.00, '2026-02-23 15:38:31', 1, 'Pantalons'),
-(8, 'STRUCTURED WIDE PANT', 'Pantalon large structuré en toile de coton épaisse. Découpes géométriques, poches utilitaires dissimulées et finitions brutes. Conçu pour résister au paysage urbain tout en gardant une silhouette fluide.', 145.00, '2026-02-23 15:44:03', 1, 'Pantalons');
+(1, 'THE LAST DUEL KNIT', '100% cotton, matières épaisses, coupe oversize et carrée, logo brodé.', 99.95, '2026-02-23 14:25:19', 1, 'unclassified'),
+(2, 'MINERAL DYE HOODIE', '100% coton lourd (450gsm). Coupe boxy et oversize. Délavage industriel inspiré des façades de Lisbonne. Finitions brutes et logo brodé ton sur ton.', 120.00, '2026-02-23 15:19:37', 1, 'unclassified'),
+(3, 'INDUSTRIAL BUCKLE BELT', 'Ceinture en cuir vegan texturé motif léopard sombre. Boucle métallique massive signature RESIDUE_ inspirée de l\'architecture brutaliste.', 65.00, '2026-02-23 15:31:12', 1, 'unclassified'),
+(4, 'NIGHTFALL ZIP HOODIE', 'Hoodie zippé bleu nuit avec détails texturés/strass. Coupe boxy et épaules tombantes. 100% coton lourd (450gsm), parfait pour la superposition.', 135.00, '2026-02-23 15:31:12', 1, 'unclassified'),
+(5, 'RAW DENIM WIDE PANT', 'Jeans brut coupe extra-large. Surpiqûres contrastantes rouges et revers imprimés. Toile denim japonaise rigide pour une silhouette architecturale et structurée.', 150.00, '2026-02-23 15:31:12', 1, 'unclassified'),
+(6, 'FADED SHADOW T-SHIRT', 'T-shirt oversize noir avec effet de délavage \"shadow\" au centre et sur les coutures. Coton épais 280gsm, tombé lourd et col ras du cou resserré.', 55.00, '2026-02-23 15:31:12', 1, 'unclassified'),
+(7, 'HEAVYWEIGHT SWEATPANT', 'Jogging oversize en coton ultra-lourd (500gsm). Effet délavé industriel, taille élastique à cordon de serrage, chevilles resserrées et poches profondes. Coupe ample pensée pour le confort et l\'esthétique urbaine.', 95.00, '2026-02-23 15:38:31', 1, 'unclassified'),
+(8, 'STRUCTURED WIDE PANT', 'Pantalon large structuré en toile de coton épaisse. Découpes géométriques, poches utilitaires dissimulées et finitions brutes. Conçu pour résister au paysage urbain tout en gardant une silhouette fluide.', 145.00, '2026-02-23 15:44:03', 1, 'unclassified');
 
 -- --------------------------------------------------------
 
@@ -180,7 +180,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `balance`, `profile_pic`, `role`) VALUES
-(1, 'admin', '$2y$10$eImiTXuWV5j.lYmR.hF.1uL8.vK1.m.6Yv7uL.7uL.7uL.7uL.7u', 'admin@residue.fr', 0.00, 'default.jpg', 'admin');
+(1, 'admin', '$2y$10$lWYTdv1tsDMvgifbHt/Jd.VEz70bPcWFnay3tLPQ4rKKu3YWcjh4q', 'admin@residue.fr', 0.00, 'default.jpg', 'admin');
 
 --
 -- Index pour les tables déchargées
@@ -238,25 +238,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `image`
 --
 ALTER TABLE `image`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT pour la table `invoice`
 --
 ALTER TABLE `invoice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `stock`
@@ -268,7 +268,7 @@ ALTER TABLE `stock`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Contraintes pour les tables déchargées
