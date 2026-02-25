@@ -1,6 +1,6 @@
 <?php 
-require_once 'includes/db.php'; 
-include 'includes/header.php'; 
+require_once __DIR__ . '/includes/db.php'; 
+include BASE_PATH . 'includes/header.php'; 
 ?>
 
     <section class="contactContainer">
@@ -83,4 +83,4 @@ include 'includes/header.php';
         </div>
     </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include BASE_PATH . 'includes/footer.php'; ?>

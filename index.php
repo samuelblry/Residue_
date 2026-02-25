@@ -81,13 +81,13 @@ include 'includes/header.php';
 
 <header class="heroSection">
     <div class="heroLayer heroBg">
-        <img src="./img/background/fondNuage.png" class="heroImg" alt="Image de nuages">
+        <img src="<?= BASE_URL ?>img/background/fondNuage.png" class="heroImg" alt="Image de nuages">
     </div>
     <div class="heroContentTitle">
         <h1 class="heroTitle">RESIDUE_</h1>
     </div>
     <div class="heroLayer heroFg">
-        <img src="./img/background/fondDesert.png" class="heroImg" alt="Image de désert">
+        <img src="<?= BASE_URL ?>img/background/fondDesert.png" class="heroImg" alt="Image de désert">
     </div>
     <div class="heroContentSubtitle">
         <p class="heroSubtitle">no waste, just taste.</p>
@@ -106,22 +106,22 @@ include 'includes/header.php';
                 <h2 class="bigTitle">
                     <?php echo isset($_GET['q']) ? 'Pour : ' . htmlspecialchars($_GET['q']) : (isset($_GET['category']) ? htmlspecialchars($_GET['category']) : 'NOUVEAUTÉS'); ?>
                 </h2>
-                <a href="shop.php" class="filterLink">VOIR TOUT</a>
+                <a href="<?= BASE_URL ?>shop/shop.php" class="filterLink">VOIR TOUT</a>
             </div>
             <?php if (!isset($_GET['q'])): ?>
                 <div class="shopHeaderCategories">
-                    <a href="shop.php" class="<?php echo !isset($_GET['category']) ? 'active' : ''; ?>">VOIR TOUT</a>
-                    <a href="shop.php?category=Hoodies"
+                    <a href="<?= BASE_URL ?>shop/shop.php" class="<?php echo !isset($_GET['category']) ? 'active' : ''; ?>">VOIR TOUT</a>
+                    <a href="<?= BASE_URL ?>shop/shop.php?category=Hoodies"
                         class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Hoodies') ? 'active' : ''; ?>">HOODIES</a>
-                    <a href="shop.php?category=Knitwear"
+                    <a href="<?= BASE_URL ?>shop/shop.php?category=Knitwear"
                         class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Knitwear') ? 'active' : ''; ?>">KNITS</a>
-                    <a href="shop.php?category=Pantalons"
+                    <a href="<?= BASE_URL ?>shop/shop.php?category=Pantalons"
                         class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Pantalons') ? 'active' : ''; ?>">PANTALONS</a>
-                    <a href="shop.php?category=Vestes"
+                    <a href="<?= BASE_URL ?>shop/shop.php?category=Vestes"
                         class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Vestes') ? 'active' : ''; ?>">VESTES</a>
-                    <a href="shop.php?category=T-shirts"
+                    <a href="<?= BASE_URL ?>shop/shop.php?category=T-shirts"
                         class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'T-shirts') ? 'active' : ''; ?>">T-SHIRTS</a>
-                    <a href="shop.php?category=Accessoires"
+                    <a href="<?= BASE_URL ?>shop/shop.php?category=Accessoires"
                         class="<?php echo (isset($_GET['category']) && $_GET['category'] == 'Accessoires') ? 'active' : ''; ?>">ACCESSOIRES</a>
                 </div>
             <?php endif; ?>
@@ -132,12 +132,12 @@ include 'includes/header.php';
                 <?php foreach ($articlesNew as $article): ?>
                     <div class="productCard">
                         <div class="cardImage">
-                            <a href="./pageArticle.php?id=<?php echo $article['id']; ?>">
+                            <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>">
                                 <span class="tagRed">New</span>
-                                <img src="<?php echo htmlspecialchars($article['image_url'] ?? 'img/default.jpg'); ?>"
+                                <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['image_url'] ?? 'img/default.jpg'); ?>"
                                     class="imgFront" alt="<?php echo htmlspecialchars($article['name']); ?>">
                                 <?php if (!empty($article['hover_image_url'])): ?>
-                                    <img src="<?php echo htmlspecialchars($article['hover_image_url']); ?>" class="imgBack"
+                                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['hover_image_url']); ?>" class="imgBack"
                                         alt="<?php echo htmlspecialchars($article['name']); ?> porté">
                                 <?php endif; ?>
                             </a>
@@ -156,43 +156,43 @@ include 'includes/header.php';
         </div>
 
         <div class="viewAllContainer">
-            <a href="shop.php" class="btnViewAll">VOIR TOUT</a>
+            <a href="<?= BASE_URL ?>shop/shop.php" class="btnViewAll">VOIR TOUT</a>
         </div>
     </div>
 </section>
 
 <div class="CategoryMenu reveal">
-    <a href="shop.php?category=Hoodies" class="categoryItem">
+    <a href="<?= BASE_URL ?>shop/shop.php?category=Hoodies" class="categoryItem">
         <div class="categoryImage">
-            <img src="./img/hoodieZipPorte.webp" alt="Hoodies">
+            <img src="<?= BASE_URL ?>img/articles/hoodieZipPorte.webp" alt="Hoodies">
         </div>
         <span class="categoryTitle">HOODIES</span>
     </a>
 
-    <a href="shop.php?category=Knitwear" class="categoryItem">
+    <a href="<?= BASE_URL ?>shop/shop.php?category=Knitwear" class="categoryItem">
         <div class="categoryImage">
-            <img src="./img/knitPorte.webp" alt="Knit">
+            <img src="<?= BASE_URL ?>img/articles/knitPorte.webp" alt="Knit">
         </div>
         <span class="categoryTitle">KNIT</span>
     </a>
 
-    <a href="shop.php?category=T-shirts" class="categoryItem">
+    <a href="<?= BASE_URL ?>shop/shop.php?category=T-shirts" class="categoryItem">
         <div class="categoryImage">
-            <img src="./img/tshirtPorte.webp" alt="T-Shirt">
+            <img src="<?= BASE_URL ?>img/articles/tshirtPorte.webp" alt="T-Shirt">
         </div>
         <span class="categoryTitle">T-SHIRT</span>
     </a>
 
-    <a href="shop.php?category=Pantalons" class="categoryItem">
+    <a href="<?= BASE_URL ?>shop/shop.php?category=Pantalons" class="categoryItem">
         <div class="categoryImage">
-            <img src="./img/pantPorte.webp" alt="Pantalon">
+            <img src="<?= BASE_URL ?>img/articles/pantPorte.webp" alt="Pantalon">
         </div>
         <span class="categoryTitle">PANTALON</span>
     </a>
 
-    <a href="shop.php?category=Accessoires" class="categoryItem">
+    <a href="<?= BASE_URL ?>shop/shop.php?category=Accessoires" class="categoryItem">
         <div class="categoryImage">
-            <img src="./img/ceinturePorte.webp" alt="Accessoires">
+            <img src="<?= BASE_URL ?>img/articles/ceinturePorte.webp" alt="Accessoires">
         </div>
         <span class="categoryTitle">ACCESSOIRES</span>
     </a>
@@ -203,16 +203,16 @@ include 'includes/header.php';
         <div class="shopHeader">
             <div class="shopHeaderTop">
                 <h2 class="bigTitle">BEST SELLER</h2>
-                <a href="shop.php" class="filterLink">VOIR TOUT</a>
+                <a href="<?= BASE_URL ?>shop/shop.php" class="filterLink">VOIR TOUT</a>
             </div>
             <div class="shopHeaderCategories">
-                <a href="shop.php" class="active">VOIR TOUT</a>
-                <a href="shop.php?category=Hoodies">HOODIES</a>
-                <a href="shop.php?category=Knitwear">KNITS</a>
-                <a href="shop.php?category=Pantalons">PANTALONS</a>
-                <a href="shop.php?category=Vestes">VESTES</a>
-                <a href="shop.php?category=T-shirts">T-SHIRTS</a>
-                <a href="shop.php?category=Accessoires">ACCESSOIRES</a>
+                <a href="<?= BASE_URL ?>shop/shop.php" class="active">VOIR TOUT</a>
+                <a href="<?= BASE_URL ?>shop/shop.php?category=Hoodies">HOODIES</a>
+                <a href="<?= BASE_URL ?>shop/shop.php?category=Knitwear">KNITS</a>
+                <a href="<?= BASE_URL ?>shop/shop.php?category=Pantalons">PANTALONS</a>
+                <a href="<?= BASE_URL ?>shop/shop.php?category=Vestes">VESTES</a>
+                <a href="<?= BASE_URL ?>shop/shop.php?category=T-shirts">T-SHIRTS</a>
+                <a href="<?= BASE_URL ?>shop/shop.php?category=Accessoires">ACCESSOIRES</a>
             </div>
         </div>
 
@@ -222,11 +222,11 @@ include 'includes/header.php';
                     <div class="productCard">
                         <div class="cardImage">
                             <span class="tagRed">Bestseller</span>
-                            <a href="./pageArticle.php?id=<?php echo $article['id']; ?>">
-                                <img src="<?php echo htmlspecialchars($article['image_url'] ?? 'img/default.jpg'); ?>"
+                            <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>">
+                                <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['image_url'] ?? 'img/default.jpg'); ?>"
                                     class="imgFront" alt="<?php echo htmlspecialchars($article['name']); ?>">
                                 <?php if (!empty($article['hover_image_url'])): ?>
-                                    <img src="<?php echo htmlspecialchars($article['hover_image_url']); ?>" class="imgBack"
+                                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['hover_image_url']); ?>" class="imgBack"
                                         alt="<?php echo htmlspecialchars($article['name']); ?> porté">
                                 <?php endif; ?>
                             </a>
@@ -245,7 +245,7 @@ include 'includes/header.php';
         </div>
 
         <div class="viewAllContainer">
-            <a href="shop.php" class="btnViewAll">VOIR TOUT</a>
+            <a href="<?= BASE_URL ?>shop/shop.php" class="btnViewAll">VOIR TOUT</a>
         </div>
     </div>
 </section>

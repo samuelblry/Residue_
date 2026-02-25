@@ -1069,10 +1069,18 @@ ol {
     transition: all 0.2s;
 }
 
-.sizeBtn:hover,
+.sizeBtn:not(.out-of-stock):hover,
 .sizeBtn.selected {
     border-color: #1c1917;
     background-color: #f4f4f0;
+}
+
+.sizeBtn.out-of-stock {
+    background-color: #e5e5e5;
+    color: #a0a0a0;
+    border-color: #e5e5e5;
+    cursor: not-allowed;
+    text-decoration: line-through;
 }
 
 .productActions {
@@ -1486,4 +1494,315 @@ ol {
     margin-bottom: 10%;
     padding: 2rem 0;
     text-align: center;
+}
+
+/* ACCOUNT PAGE - FIGMA MOCKUP */
+.accountContainer {
+    max-width: 1400px;
+    /* Increased from 1200px */
+    margin: 4rem auto;
+    padding: 0 4rem;
+    /* Matching the mockup side padding */
+    font-family: 'Inter', sans-serif;
+    color: #1c1917;
+}
+
+.accountMainTitle {
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+}
+
+/* Modal Popup pour Recharger */
+.rechargeModal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(28, 25, 23, 0.4);
+    /* #1c1917 at 40% opacity for grey overlay */
+    backdrop-filter: blur(2px);
+    align-items: center;
+    justify-content: center;
+}
+
+.rechargeModal.active {
+    display: flex;
+}
+
+.rechargeModalContent {
+    background-color: #f4f4f0;
+    padding: 3rem;
+    border: 1px solid #1c1917;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.closeRechargeModal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: #1c1917;
+}
+
+.rechargeModalContent h2 {
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.rechargeInput {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #1c1917;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.btnConfirmRecharge {
+    width: 100%;
+    border: 1px solid #1c1917;
+    background: #1c1917;
+    color: #fff;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnConfirmRecharge:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+/* Identité, Données, Porte-Monnaie */
+.accountTopGrid {
+    display: grid;
+    grid-template-columns: 150px 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 5rem;
+    align-items: start;
+}
+
+.accountAvatar {
+    width: 90px;
+    height: 90px;
+    background-color: #e5e5e5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountAvatar svg {
+    width: 50%;
+    height: 50%;
+    fill: #ffffff;
+}
+
+.accountInfoBlock h3 {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.accountInfoLine {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.accountInfoLine strong {
+    font-weight: 900;
+    width: 100px;
+    display: inline-block;
+}
+
+.accountInfoWordWrap {
+    word-break: break-all;
+}
+
+.btnRecharge {
+    display: inline-block;
+    border: 1px solid #1c1917;
+    background: transparent;
+    padding: 0.3rem 1rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnRecharge:hover {
+    background: #1c1917;
+    color: #fff;
+    border-color: #1c1917;
+}
+
+/* Sections communes */
+.accountSectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+}
+
+.accountSectionHeader h2 {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.btnAccountAction {
+    border: 1px solid #1c1917;
+    background: transparent;
+    padding: 0.3rem 1rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: #1c1917;
+}
+
+.btnAccountAction:hover {
+    background: #1c1917;
+    color: #fff;
+}
+
+/* Grid d'articles */
+.accountArticlesGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-bottom: 5rem;
+}
+
+.accountArticleCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.accountArticleImage {
+    aspect-ratio: 4/5;
+    background-color: #e5e5e5;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    position: relative;
+    display: block;
+}
+
+.accountArticleImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+}
+
+.accountArticleTitle {
+    font-size: 0.65rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.accountArticlePrice {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.accountArticleColors {
+    display: flex;
+    gap: 4px;
+}
+
+.accountArticleColors .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.dot-red {
+    background: #dc2626;
+}
+
+.dot-blue {
+    background: #2563eb;
+}
+
+.dot-beige {
+    background: #fef08a;
+}
+
+.dot-black {
+    background: #1c1917;
+}
+
+/* Commandes */
+.orderBlock {
+    margin-bottom: 3rem;
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.orderHeader span {
+    font-weight: 400;
+    margin-left: 0.5rem;
+}
+
+.btnDownloadInvoice {
+    display: block;
+    width: max-content;
+    margin: 1.5rem auto 0;
+    border: 1px solid #1c1917;
+    background: transparent;
+    padding: 0.3rem 2rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: #1c1917;
+}
+
+.btnDownloadInvoice:hover {
+    background: #1c1917;
+    color: #fff;
 }

@@ -21,7 +21,7 @@ if ($suggestionsResult) {
 
     <header class="heroSectionAPropos">
         <div class="heroBgContainerAPropos">
-            <img src="./img/background/fondApropos.png" class="heroImgAPropos" alt="Image de fond de la section">
+            <img src="<?= BASE_URL ?>img/background/fondApropos.png" class="heroImgAPropos" alt="Image de fond de la section">
         </div>
         <div class="heroContentAPropos">
             <h1 class="heroTitleAPropos">Qui sommes nous ?</h1>
@@ -46,17 +46,17 @@ if ($suggestionsResult) {
         <h3 class="subtitleTimeline">CREDIT : FAKE VOCABULAIRE</h3>
         
         <div class="timelineImages">
-            <div class="timelineItem">
-                <img src="./img/2026.png" alt="Collection 2026">
-                <div class="yearOverlay">2026</div>
+            <div class="col" style="flex:1;">
+                <img src="<?= BASE_URL ?>img/2026.png" alt="Collection 2026">
+                <p>2026</p>
             </div>
-            <div class="timelineItem">
-                <img src="./img/2025.png" alt="Collection 2025">
-                <div class="yearOverlay">2025</div>
+            <div class="col" style="flex:1;">
+                <img src="<?= BASE_URL ?>img/2025.png" alt="Collection 2025">
+                <p>2025</p>
             </div>
-            <div class="timelineItem">
-                <img src="./img/2024.png" alt="Collection 2024">
-                <div class="yearOverlay">2024</div>
+            <div class="col" style="flex:1;">
+                <img src="<?= BASE_URL ?>img/2024.png" alt="Collection 2024">
+                <p>2024</p>
             </div>
         </div>
         <p class="sloganAPropos sloganTimeline">NO WASTE, JUST TASTE.</p>
@@ -71,7 +71,7 @@ if ($suggestionsResult) {
             <div class="suggestionCard">
                 <div class="suggestionImgWrapper">
                     <?php if(!empty($article['main_image'])): ?>
-                        <img src="<?php echo htmlspecialchars($article['main_image']); ?>" alt="<?php echo htmlspecialchars($article['name']); ?>">
+                        <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['main_image']); ?>" alt="<?php echo htmlspecialchars($article['name']); ?>">
                     <?php else: ?>
                         <div class="placeholderImg"></div>
                     <?php endif; ?>

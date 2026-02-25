@@ -1,6 +1,6 @@
 <?php 
-require_once 'includes/db.php'; 
-include 'includes/header.php'; 
+require_once __DIR__ . '/includes/db.php'; 
+include BASE_PATH . 'includes/header.php'; 
 ?>
 
     <section class="errorContainer">
@@ -8,4 +8,4 @@ include 'includes/header.php';
         <h3 class="subtitleError">le site est en maintenance, revenez plus tard !</h3>
     </section>
 
-<?php include 'includes/footer.php'; ?>
+<?php include BASE_PATH . 'includes/footer.php'; ?>
