@@ -268,7 +268,7 @@ include BASE_PATH . 'includes/header.php';
                 <?php endforeach; ?>
             </div>
             
-            <button class="btnDownloadInvoice" onclick="alert('Fonctionnalité de téléchargement de facture en cours de développement.')">Télécharger la facture</button>
+            <button class="btnDownloadInvoice" onclick="window.open('<?= BASE_URL ?>shop/generate_invoice.php?id=<?php echo $inv['id']; ?>', '_blank')">Télécharger la facture</button>
         </div>
     <?php endforeach; ?>
 
