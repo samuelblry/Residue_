@@ -7,12 +7,21 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+$current_user_id = $_SESSION['user_id'];
+$is_own_account = true;
+
+if (isset($_GET['id']) && intval($_GET['id']) !== $current_user_id) {
+    $user_id = intval($_GET['id']);
+    $is_own_account = false;
+} else {
+    $user_id = $current_user_id;
+}
+
 $success = "";
 $error = "";
 
-// Traitement des formulaires
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Traitement des formulaires (seulement si c'est notre propre compte)
+if ($is_own_account && $_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'add_balance':
@@ -114,8 +123,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Récupérer les infos actuelles de l'utilisateur
+// Récupérer les infos actuelles de l'utilisateur visé
 $resUser = $mysqli->query("SELECT * FROM user WHERE id=$user_id");
+if ($resUser->num_rows === 0) {
+    header("Location: " . BASE_URL . "index.php");
+    exit();
+}
 $user = $resUser->fetch_assoc();
 
 // Extraire prenom et nom (avec fallback s'ils n'existent pas)
@@ -125,7 +138,7 @@ $userPseudo = $user['username'] ?? 'USER123';
 $userEmail = $user['email'] ?? 'USER123@GMAIL.COM';
 $userBalance = number_format($user['balance'], 2, ',', ' ');
 
-// Récupérer les articles mis en vente par l'utilisateur
+// Récupérer les articles mis en vente par l'utilisateur visé
 $articlesVendus = [];
 $resArticles = $mysqli->query("SELECT Article.id, Article.name, Article.price, Image.url AS image_url 
                                FROM article 
@@ -137,28 +150,30 @@ if ($resArticles && $resArticles->num_rows > 0) {
     }
 }
 
-// Récupérer l'historique des transactions de l'utilisateur
+// Récupérer l'historique des transactions SI c'est notre propre compte
 $invoices = [];
-$resInvoices = $mysqli->query("SELECT id, transaction_date, amount FROM invoice WHERE user_id=$user_id ORDER BY transaction_date DESC");
-if ($resInvoices && $resInvoices->num_rows > 0) {
-    while ($row = $resInvoices->fetch_assoc()) {
-        $row['items'] = [];
-        $invoices[$row['id']] = $row;
+if ($is_own_account) {
+    $resInvoices = $mysqli->query("SELECT id, transaction_date, amount FROM invoice WHERE user_id=$user_id ORDER BY transaction_date DESC");
+    if ($resInvoices && $resInvoices->num_rows > 0) {
+        while ($row = $resInvoices->fetch_assoc()) {
+            $row['items'] = [];
+            $invoices[$row['id']] = $row;
+        }
     }
-}
 
-// Récupérer les articles des factures
-if (!empty($invoices)) {
-    $invoice_ids = implode(',', array_keys($invoices));
-    $sqlItems = "SELECT invoice_item.invoice_id, invoice_item.quantity, invoice_item.price, article.id as article_id, article.name, image.url as image_url 
-                 FROM invoice_item 
-                 LEFT JOIN article ON invoice_item.article_id = article.id 
-                 LEFT JOIN image ON article.id = image.article_id AND image.is_main = 1 
-                 WHERE invoice_item.invoice_id IN ($invoice_ids)";
-    $resItems = $mysqli->query($sqlItems);
-    if ($resItems && $resItems->num_rows > 0) {
-        while ($item = $resItems->fetch_assoc()) {
-            $invoices[$item['invoice_id']]['items'][] = $item;
+    // Récupérer les articles des factures
+    if (!empty($invoices)) {
+        $invoice_ids = implode(',', array_keys($invoices));
+        $sqlItems = "SELECT invoice_item.invoice_id, invoice_item.quantity, invoice_item.price, article.id as article_id, article.name, image.url as image_url 
+                     FROM invoice_item 
+                     LEFT JOIN article ON invoice_item.article_id = article.id 
+                     LEFT JOIN image ON article.id = image.article_id AND image.is_main = 1 
+                     WHERE invoice_item.invoice_id IN ($invoice_ids)";
+        $resItems = $mysqli->query($sqlItems);
+        if ($resItems && $resItems->num_rows > 0) {
+            while ($item = $resItems->fetch_assoc()) {
+                $invoices[$item['invoice_id']]['items'][] = $item;
+            }
         }
     }
 }
@@ -206,9 +221,12 @@ include BASE_PATH . 'includes/header.php';
             <div class="accountInfoLine"><strong>Pseudo</strong> <?php echo htmlspecialchars($userPseudo); ?></div>
             <div class="accountInfoLine"><strong>Prénom</strong> <?php echo htmlspecialchars($userPrenom); ?></div>
             <div class="accountInfoLine"><strong>Nom</strong> <?php echo htmlspecialchars($userNom); ?></div>
+            <?php if ($is_own_account): ?>
             <button type="button" class="btnRecharge" onclick="openEditInfoModal()" style="margin-top: 1rem;">Modifier mes informations</button>
+            <?php endif; ?>
         </div>
 
+        <?php if ($is_own_account): ?>
         <div class="accountInfoBlock">
             <h3>Données</h3>
             <div class="accountInfoLine accountInfoWordWrap"><strong>Mail</strong> <?php echo htmlspecialchars($userEmail); ?></div>
@@ -220,18 +238,21 @@ include BASE_PATH . 'includes/header.php';
             <div class="accountInfoLine"><strong>Solde Actuel</strong> <?php echo $userBalance; ?> EUR</div>
             <button type="button" class="btnRecharge" onclick="openRechargeModal()">Recharger le solde</button>
         </div>
+        <?php endif; ?>
     </div>
 
     <!-- Articles Postés -->
     <div class="accountSectionHeader">
         <h2>Articles Postés</h2>
+        <?php if ($is_own_account): ?>
         <a href="<?= BASE_URL ?>admin/add_article.php" class="btnAccountAction">Ajouter un article</a>
+        <?php endif; ?>
     </div>
 
     <div class="accountArticlesGrid">
         <?php foreach ($articlesVendus as $art): ?>
             <div class="accountArticleCard">
-                <a href="<?= BASE_URL ?>admin/editArticle.php?id=<?php echo $art['id']; ?>" class="accountArticleImage">
+                <a href="<?= BASE_URL ?><?php echo $is_own_account ? 'admin/editArticle.php' : 'shop/pageArticle.php'; ?>?id=<?php echo $art['id']; ?>" class="accountArticleImage">
                     <?php if (!empty($art['image_url'])): ?>
                         <img src="<?= BASE_URL ?><?php echo htmlspecialchars($art['image_url']); ?>" alt="<?php echo htmlspecialchars($art['name']); ?>">
                     <?php endif; ?>
@@ -243,6 +264,7 @@ include BASE_PATH . 'includes/header.php';
     </div>
 
     <!-- Commandes -->
+    <?php if ($is_own_account): ?>
     <div class="accountSectionHeader">
         <h2>Commandes</h2>
     </div>
@@ -275,6 +297,7 @@ include BASE_PATH . 'includes/header.php';
     <div class="addArticleActions" style="margin-top: 3rem; justify-content: center; display: flex;">
         <button type="button" class="actionBtn cancelBtn" onclick="openDeleteAccountModal()" style="color: #dc2626; border-color: #dc2626; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2rem; font-weight: bold; text-transform: uppercase; background: transparent; border: 1px solid #dc2626; cursor: pointer; transition: all 0.3s;"><span class="crossIcon" style="font-size: 1.2rem;">✕</span> SUPPRIMER MON COMPTE</button>
     </div>
+    <?php endif; ?>
 
 </div>
 

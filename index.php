@@ -1,4 +1,5 @@
 <?php
+if(session_status() === PHP_SESSION_NONE) session_start();
 require_once 'includes/db.php';
 
 // Gestion de la recherche et des catégories
@@ -73,6 +74,15 @@ $articlesBestsellers = [];
 if ($resultBest && $resultBest->num_rows > 0) {
     while ($row = $resultBest->fetch_assoc()) {
         $articlesBestsellers[] = $row;
+}
+}
+
+// Fetch user favorites for toggle state
+$userFavorites = [];
+if (isset($_SESSION['user_id'])) {
+    $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));
+    while ($favRow = $favQuery->fetch_assoc()) {
+        $userFavorites[] = $favRow['article_id'];
     }
 }
 
@@ -91,10 +101,6 @@ include 'includes/header.php';
     </div>
     <div class="heroContentSubtitle">
         <p class="heroSubtitle">no waste, just taste.</p>
-    </div>
-    <div class="heroOverlay">
-        <a href="./pageArticle.php" class="btnHeroShowNewArticle" aria-label="Ouvre la page des derniers ajouts">VOIR
-            LES DERNIERS AJOUTS</a>
     </div>
 </header>
 
@@ -146,7 +152,17 @@ include 'includes/header.php';
                             <div>
                                 <h3 class="articleName"><?php echo htmlspecialchars($article['name']); ?></h3>
                             </div>
-                            <span class="articlePrice"><?php echo number_format($article['price'], 2, ',', ' '); ?>€</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <span class="articlePrice"><?php echo number_format($article['price'], 2, ',', ' '); ?>€</span>
+                                <?php $isFav = in_array($article['id'], $userFavorites); ?>
+                                <button type="button" class="favoriteBtn" data-id="<?php echo $article['id']; ?>" onclick="toggleFavorite(event, <?php echo $article['id']; ?>)">
+                                    <?php if ($isFav): ?>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon is-favorite"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                    <?php else: ?>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                    <?php endif; ?>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -235,7 +251,17 @@ include 'includes/header.php';
                             <div>
                                 <h3 class="articleName"><?php echo htmlspecialchars($article['name']); ?></h3>
                             </div>
-                            <span class="articlePrice"><?php echo number_format($article['price'], 2, ',', ' '); ?>€</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <span class="articlePrice"><?php echo number_format($article['price'], 2, ',', ' '); ?>€</span>
+                                <?php $isFav = in_array($article['id'], $userFavorites); ?>
+                                <button type="button" class="favoriteBtn" data-id="<?php echo $article['id']; ?>" onclick="toggleFavorite(event, <?php echo $article['id']; ?>)">
+                                    <?php if ($isFav): ?>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon is-favorite"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                    <?php else: ?>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                    <?php endif; ?>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>

@@ -8,7 +8,7 @@ $suggestionsResult = $mysqli->query("
            (SELECT url FROM image WHERE article_id = a.id AND is_main = 1 LIMIT 1) as main_image
     FROM article a 
     ORDER BY RAND() 
-    LIMIT 4
+    LIMIT 5
 ");
 
 $suggestions = [];
@@ -64,29 +64,47 @@ if ($suggestionsResult) {
 
     <div class="separationCategoryArticle" style="margin-bottom: 3rem;"></div>
 
-    <section class="suggestionsAPropos">
-        <h2 class="titleSuggestions">SUGGESTIONS</h2>
+<?php
+// Fetch user favorites for suggestions toggle state
+$userFavorites = [];
+if (isset($_SESSION['user_id'])) {
+    $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));
+    while ($favRow = $favQuery->fetch_assoc()) {
+        $userFavorites[] = $favRow['article_id'];
+    }
+}
+?>
+    <section class="suggestionsSection" style="padding: 0 5% 6rem 5%; background-color: transparent;">
+        <h3 class="suggestionsTitle">SUGGESTIONS</h3>
         <div class="suggestionsGrid">
             <?php foreach($suggestions as $article): ?>
-            <div class="suggestionCard">
-                <div class="suggestionImgWrapper">
-                    <?php if(!empty($article['main_image'])): ?>
-                        <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['main_image']); ?>" alt="<?php echo htmlspecialchars($article['name']); ?>">
-                    <?php else: ?>
-                        <div class="placeholderImg"></div>
-                    <?php endif; ?>
-                </div>
-                <div class="suggestionInfo">
-                    <h4 class="suggestionName"><?php echo htmlspecialchars($article['name']); ?></h4>
-                    <span class="suggestionPrice"><?php echo number_format($article['price'], 2); ?> EUR</span>
-                    <div class="suggestionColors">
-                        <span class="colorDot" style="background-color: #dc2626;"></span>
-                        <span class="colorDot" style="background-color: #3b82f6;"></span>
-                        <span class="colorDot" style="background-color: #d1d5db;"></span>
-                        <span class="colorDot" style="background-color: #1c1917;"></span>
+                <div class="suggestionCardFake">
+                    <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>" class="suggestionImageLink">
+                        <?php if(!empty($article['main_image'])): ?>
+                            <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['main_image']); ?>" class="suggestionImage" alt="<?php echo htmlspecialchars($article['name']); ?>">
+                        <?php else: ?>
+                            <div class="suggestionImagePlaceholder"></div>
+                        <?php endif; ?>
+                    </a>
+                    <div class="suggestionInfo">
+                        <div>
+                            <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>" style="text-decoration: none; color: inherit;">
+                                <p class="suggestionName"><?php echo htmlspecialchars($article['name']); ?></p>
+                            </a>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="suggestionPrice"><?php echo number_format($article['price'], 2, ',', ' '); ?> EUR</span>
+                            <?php $isFavSugg = in_array($article['id'], $userFavorites); ?>
+                            <button type="button" class="favoriteBtn" data-id="<?php echo $article['id']; ?>" onclick="toggleFavorite(event, <?php echo $article['id']; ?>)">
+                                <?php if ($isFavSugg): ?>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon is-favorite"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <?php else: ?>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <?php endif; ?>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endforeach; ?>
         </div>
     </section>

@@ -1182,23 +1182,36 @@ ol {
 }
 
 .suggestionsGrid {
-    display: flex;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
 }
 
 .suggestionCardFake {
-    flex: 1;
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
 }
 
+.suggestionImageLink {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.suggestionImage {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    background-color: #e7e5e4;
+    display: block;
+}
+
 .suggestionImagePlaceholder {
     width: 100%;
     aspect-ratio: 3/4;
     background-color: #e7e5e4;
-    margin-bottom: 1rem;
+    display: block;
 }
 
 .suggestionInfo {
@@ -1805,4 +1818,222 @@ ol {
 .btnDownloadInvoice:hover {
     background: #1c1917;
     color: #fff;
+}
+
+/* ========================================================================= */
+/* FILTER SIDEBAR STYLES */
+/* ========================================================================= */
+
+.filterOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(28, 25, 23, 0.5);
+    /* #1c1917 at 50% opacity */
+    backdrop-filter: blur(2px);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.filterOverlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.filterSidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    /* Hidden off-screen to the right by default */
+    width: 100%;
+    max-width: 400px;
+    /* Sidebar width */
+    height: 100vh;
+    background-color: #f4f4f0;
+    /* Match Residue background */
+    z-index: 1050;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.filterSidebar.active {
+    right: 0;
+    /* Slide in smoothly */
+}
+
+.filterSidebarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    border-bottom: 1px solid #e7e5e4;
+    background-color: #f4f4f0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.closeFilterBtn {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #1c1917;
+    line-height: 1;
+}
+
+.filterForm {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.filterSection {
+    border-bottom: 1px solid #e7e5e4;
+    padding-bottom: 2rem;
+}
+
+/* Custom Checkbox and Radio styling matching Residue theme */
+.filterRadioLabel,
+.filterCheckboxLabel {
+    position: relative;
+    user-select: none;
+    color: #57534e;
+    transition: color 0.2s;
+}
+
+.filterRadioLabel:hover,
+.filterCheckboxLabel:hover {
+    color: #1c1917;
+}
+
+.filterRadioLabel input[type="radio"]:checked+span,
+.filterCheckboxLabel input[type="checkbox"]:checked+span {
+    color: #1c1917;
+    font-weight: 700;
+}
+
+.btnApplyFilters {
+    background-color: #1c1917;
+    color: #fff;
+    border: 1px solid #1c1917;
+    padding: 1.25rem;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: auto;
+}
+
+.btnApplyFilters:hover {
+    background-color: #dc2626;
+    /* Residue Red */
+    border-color: #dc2626;
+}
+
+/* ========================================================================= */
+/* SORTING & FILTER BUTTONS ROW (SHOP.PHP) */
+/* ========================================================================= */
+
+.catalogHeaderRight {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.sortSelect {
+    border: 1px solid #1c1917;
+    background-color: transparent;
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%231c1917' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    font-family: 'Inter', sans-serif;
+    color: #1c1917;
+}
+
+.sortSelect:hover,
+.sortSelect:focus {
+    background-color: #1c1917;
+    color: #fff;
+    outline: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+}
+
+.filterBtn {
+    border: 1px solid #1c1917;
+    background-color: #1c1917;
+    color: #fff;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.filterBtn:hover {
+    background-color: transparent;
+    color: #1c1917;
+}
+
+/* ========================================================================= */
+/* FAVORITES COMPONENT STYLES */
+/* ========================================================================= */
+
+.favoriteBtn {
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+}
+
+.favoriteBtn:hover {
+    transform: scale(1.15);
+}
+
+.favoriteBtn svg.is-favorite,
+.favoriteBtn svg.is-favorite path,
+svg.is-favorite,
+svg.is-favorite path {
+    fill: #dc2626 !important;
+    stroke: #dc2626 !important;
+}
+
+.favoriteBtn svg:not(.is-favorite),
+.favoriteBtn svg:not(.is-favorite) path,
+.btnAddToFav svg:not(.is-favorite),
+.btnAddToFav svg:not(.is-favorite) path {
+    fill: none !important;
+    stroke: currentColor !important;
+}
+
+.favoriteBtn svg,
+.btnAddToFav svg {
+    transition: all 0.2s ease-in-out;
 }

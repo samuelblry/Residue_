@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
+
     /* --- CUSTOM CURSOR --- */
     const cursorDot = document.querySelector("[data-cursor-dot]");
     const cursorOutline = document.querySelector("[data-cursor-outline]");
@@ -38,14 +38,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     } else {
         // Hide custom cursor elements on touch devices
-        if(cursorDot) cursorDot.style.display = 'none';
-        if(cursorOutline) cursorOutline.style.display = 'none';
+        if (cursorDot) cursorDot.style.display = 'none';
+        if (cursorOutline) cursorOutline.style.display = 'none';
     }
 
 
     /* --- SCROLL ANIMATIONS (Reveal) --- */
     const revealElements = document.querySelectorAll('.reveal');
-    
+
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -84,22 +84,22 @@ document.addEventListener("DOMContentLoaded", () => {
         btnBoutiqueNav.addEventListener("click", (e) => {
             e.preventDefault();
             const isExpanded = btnBoutiqueNav.getAttribute("aria-expanded") === "true";
-            
+
             if (isExpanded) {
                 btnBoutiqueNav.setAttribute("aria-expanded", "false");
                 megaMenuShop.classList.remove("showMegaMenuShop");
                 navBarPrincipal.classList.remove("showMegaMenuShop");
-                
+
                 // Reset navbar style if not scrolled
-                if(window.scrollY < 50) {
-                   navBar.classList.remove("modeWhite");
-                   navBar.classList.remove("modeLogoVisible");
+                if (window.scrollY < 50) {
+                    navBar.classList.remove("modeWhite");
+                    navBar.classList.remove("modeLogoVisible");
                 }
             } else {
                 btnBoutiqueNav.setAttribute("aria-expanded", "true");
                 megaMenuShop.classList.add("showMegaMenuShop");
                 navBarPrincipal.classList.add("showMegaMenuShop");
-                
+
                 // Force white mode when menu is open
                 navBar.classList.add("modeWhite");
                 navBar.classList.add("modeLogoVisible");
@@ -120,3 +120,51 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+/* --- FAVORITES API INTEGRATION --- */
+function toggleFavorite(event, articleId) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const btn = event.currentTarget || event.target.closest('button');
+    if (!btn) return;
+    const icon = btn.querySelector('svg');
+
+    // Get the base url path, assumes /Residue_/
+    const baseUrl = '/Residue_/';
+
+    fetch(baseUrl + 'api/toggle_favorite.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ article_id: articleId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (data.action === 'added') {
+                    icon.classList.add('is-favorite');
+                } else if (data.action === 'removed') {
+                    icon.classList.remove('is-favorite');
+
+                    // If we are currently on the favorites page, we should instantly visually remove the card
+                    if (window.location.pathname.includes('favorites.php')) {
+                        const card = btn.closest('.catalogCard');
+                        if (card) {
+                            card.style.display = 'none';
+                        }
+                    }
+                }
+            } else {
+                if (data.message === 'Non connecté') {
+                    window.location.href = baseUrl + 'auth/login.php';
+                } else {
+                    console.error("Error toggling favorite:", data.message);
+                }
+            }
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+        });
+}

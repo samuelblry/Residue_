@@ -212,3 +212,61 @@ body.loginPageBody {
 .loginRegisterLink a:hover {
     text-decoration: underline;
 }
+
+/* FORGOT PASSWORD MODAL */
+.forgotPasswordModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+}
+
+.forgotPasswordContent {
+    background-color: #f4f4f0;
+    padding: 3rem 2rem;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.forgotPasswordClose {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #1c1917;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.forgotPasswordClose:hover {
+    color: #dc2626;
+}
+
+.forgotPasswordTitle {
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #1c1917;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+}
+
+.forgotPasswordText {
+    font-size: 0.8rem;
+    color: #57534e;
+    text-transform: uppercase;
+    line-height: 1.5;
+    font-weight: 500;
+}

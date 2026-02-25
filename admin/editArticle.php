@@ -179,7 +179,8 @@ $existingImages = [];
 while ($img = $queryImages->fetch_assoc()) {
     $existingImages[] = [
         'id' => $img['id'],
-        'url' => BASE_URL . $img['url']
+        'url' => BASE_URL . $img['url'],
+        'raw_url' => $img['url']
     ];
 }
 
@@ -260,13 +261,14 @@ include BASE_PATH . 'includes/header.php';
             <div class="formSection" style="flex-direction: column; align-items: flex-start; border-bottom: none;">
                 <div class="sectionHeader" style="margin-bottom: 0.5rem; width: 100%;">CATÉGORIE</div>
                 <select name="category" class="categorySelect" required>
-                    <option value="Knitwear" <?php if($article['category']=='Knitwear') echo 'selected'; ?>>KNITWEAR</option>
-                    <option value="Vestes" <?php if($article['category']=='Vestes') echo 'selected'; ?>>VESTES</option>
-                    <option value="Hoodies" <?php if($article['category']=='Hoodies') echo 'selected'; ?>>HOODIES</option>
-                    <option value="T-shirts" <?php if($article['category']=='T-shirts') echo 'selected'; ?>>T-SHIRTS</option>
-                    <option value="Pantalons" <?php if($article['category']=='Pantalons') echo 'selected'; ?>>PANTALONS</option>
-                    <option value="Ceinture" <?php if($article['category']=='Ceinture') echo 'selected'; ?>>ACCESSOIRES</option>
-                    <option value="Autre" <?php if($article['category']=='Autre') echo 'selected'; ?>>AUTRE</option>
+                    <?php $savedCat = strtolower(trim($article['category'])); ?>
+                    <option value="Knitwear" <?php if($savedCat === 'knitwear') echo 'selected'; ?>>KNITWEAR</option>
+                    <option value="Vestes" <?php if($savedCat === 'vestes') echo 'selected'; ?>>VESTES</option>
+                    <option value="Hoodies" <?php if($savedCat === 'hoodies') echo 'selected'; ?>>HOODIES</option>
+                    <option value="T-shirts" <?php if($savedCat === 't-shirts') echo 'selected'; ?>>T-SHIRTS</option>
+                    <option value="Pantalons" <?php if($savedCat === 'pantalons') echo 'selected'; ?>>PANTALONS</option>
+                    <option value="Accessoires" <?php if($savedCat === 'accessoires') echo 'selected'; ?>>ACCESSOIRES</option>
+                    <option value="Autre" <?php if($savedCat === 'autre') echo 'selected'; ?>>AUTRE</option>
                 </select>
             </div>
 
@@ -388,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 finalOrderArray.push('new:' + newFileCount);
                 newFileCount++;
             } else if (item.type === 'existing') {
-                finalOrderArray.push('existing:' + item.data.url);
+                finalOrderArray.push('existing:' + item.data.raw_url);
             }
         });
 

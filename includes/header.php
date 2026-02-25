@@ -10,7 +10,7 @@ if(session_status() === PHP_SESSION_NONE) session_start();
     <title>RESIDUE_</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=<?php echo time(); ?>">
-    <script src="<?= BASE_URL ?>js/script.js" defer></script>
+    <script src="<?= BASE_URL ?>js/script.js?v=<?php echo time(); ?>" defer></script>
 </head>
 
 <?php
@@ -25,6 +25,7 @@ $hasHero = in_array($currentPage, ['index.php', 'apropos.php', 'login.php', 'reg
 
                 <div class="desktopLinks">
                     <a href="<?= BASE_URL ?>shop/shop.php" id="btnBoutiqueNav">Boutique</a>
+                    <a href="<?= BASE_URL ?>shop/favorites.php" id="btnFavorisNav" style="font-weight: 700;">FAVORIS</a>
                     <a href="<?= BASE_URL ?>contact.php" id="btnContactNav">Contact</a>
                 </div>
 

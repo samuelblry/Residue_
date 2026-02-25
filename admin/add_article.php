@@ -180,7 +180,7 @@ include BASE_PATH . 'includes/header.php';
                     <option value="Hoodies">HOODIES</option>
                     <option value="T-shirts">T-SHIRTS</option>
                     <option value="Pantalons">PANTALONS</option>
-                    <option value="Ceinture">ACCESSOIRES</option>
+                    <option value="Accessoires">ACCESSOIRES</option>
                     <option value="Autre">AUTRE</option>
                 </select>
             </div>

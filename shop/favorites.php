@@ -1,10 +1,17 @@
 <?php
-if(session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/../includes/db.php';
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: " . BASE_URL . "auth/login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
 
 // Gestion de la catégorie
 $categoryFilter = "";
-$categoryTitle = "VOIR TOUT";
+$categoryTitle = "MES FAVORIS";
 $selectedSizes = [];
 
 if (isset($_GET['category']) && !empty(trim($_GET['category']))) {
@@ -24,12 +31,13 @@ if (isset($_GET['sizes']) && is_array($_GET['sizes'])) {
 // Construction de la requête (Jointure avec stock et vérification de stock global)
 $sql = "SELECT Article.id, Article.name, Article.price, Image.url AS image_url 
         FROM Article 
+        INNER JOIN favorite ON Article.id = favorite.article_id AND favorite.user_id = ?
         LEFT JOIN Image ON Article.id = Image.article_id AND Image.is_main = 1 
         LEFT JOIN stock ON Article.id = stock.article_id 
         WHERE (stock.quant_xs + stock.quant_s + stock.quant_m + stock.quant_l + stock.quant_xl) > 0 ";
 
-$params = [];
-$types = "";
+$params = [$user_id];
+$types = "i";
 
 if ($categoryFilter !== "") {
     $sql .= "AND Article.category = ? ";
@@ -151,7 +159,8 @@ include BASE_PATH . 'includes/header.php';
                         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                             <span class="catalogPrice"><?php echo number_format($article['price'], 2, ',', ' '); ?> EUR</span>
                             <?php 
-                                $isFav = in_array($article['id'], $userFavorites);
+                                // On the favorites page, ALL articles displayed are favorites by definition
+                                $isFav = true;
                             ?>
                             <button type="button" class="favoriteBtn" data-id="<?php echo $article['id']; ?>" onclick="toggleFavorite(event, <?php echo $article['id']; ?>)">
                                 <?php if ($isFav): ?>
@@ -180,7 +189,7 @@ include BASE_PATH . 'includes/header.php';
         <button id="closeFilterBtn" class="closeFilterBtn">&times;</button>
     </div>
     
-    <form action="<?= BASE_URL ?>shop/shop.php" method="GET" class="filterForm">
+    <form action="<?= BASE_URL ?>shop/favorites.php" method="GET" class="filterForm">
         <div class="filterSection">
             <h3 style="font-size: 0.9rem; margin-bottom: 1rem; font-weight: 700;">CATÉGORIE</h3>
             <input type="hidden" name="sort" value="<?php echo htmlspecialchars($sortOrder); ?>">

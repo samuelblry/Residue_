@@ -55,7 +55,7 @@ include BASE_PATH . 'includes/header.php';
                 </div>
 
                 <div class="loginForgotPass">
-                    <a href="#">MOT DE PASSE OUBLIÉ ?</a>
+                    <a href="#" id="forgotPasswordTrigger">MOT DE PASSE OUBLIÉ ?</a>
                 </div>
                 
                 <button type="submit" class="loginSubmitBtn">SE CONNECTER</button>
@@ -65,6 +65,15 @@ include BASE_PATH . 'includes/header.php';
                 PAS DE COMPTE ? <a href="<?= BASE_URL ?>auth/register.php">CRÉER EN UN MAINTENANT !</a>
             </p>
         </div>
+    </div>
+</div>
+
+<!-- Modal Mot de Passe Oublié -->
+<div id="forgotPasswordModal" class="forgotPasswordModal">
+    <div class="forgotPasswordContent">
+        <span id="forgotPasswordClose" class="forgotPasswordClose">&times;</span>
+        <h2 class="forgotPasswordTitle">MAINTENANCE</h2>
+        <p class="forgotPasswordText">LA FONCTIONNALITÉ DE RÉINITIALISATION DE MOT DE PASSE EST ACTUELLEMENT EN MAINTENANCE.<br><br>VEUILLEZ NOUS EXCUSER POUR LA GÊNE OCCASIONNÉE.</p>
     </div>
 </div>
 
@@ -88,6 +97,31 @@ include BASE_PATH . 'includes/header.php';
     window.addEventListener('resize', alignGlassPanel);
     // Petit fallback au cas où l'image ou la typo charge avec du retard
     window.addEventListener('load', alignGlassPanel);
+
+    // Modal Mot de Passe Oublié
+    const forgotModal = document.getElementById('forgotPasswordModal');
+    const forgotTrigger = document.getElementById('forgotPasswordTrigger');
+    const forgotClose = document.getElementById('forgotPasswordClose');
+
+    if (forgotTrigger && forgotModal) {
+        forgotTrigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            forgotModal.style.display = 'flex';
+        });
+    }
+
+    if (forgotClose && forgotModal) {
+        forgotClose.addEventListener('click', function() {
+            forgotModal.style.display = 'none';
+        });
+    }
+
+    // Fermer si clic en dehors
+    window.addEventListener('click', function(e) {
+        if (e.target == forgotModal) {
+            forgotModal.style.display = 'none';
+        }
+    });
 </script>
 
 <?php include BASE_PATH . 'includes/footer.php'; ?>

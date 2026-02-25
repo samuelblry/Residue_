@@ -238,19 +238,47 @@ include BASE_PATH . 'includes/header.php';
         </div>
     <?php endif; ?>
 
+<?php
+// Fetch user favorites for suggestions toggle state
+$userFavorites = [];
+if (isset($_SESSION['user_id'])) {
+    $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));
+    while ($favRow = $favQuery->fetch_assoc()) {
+        $userFavorites[] = $favRow['article_id'];
+    }
+}
+?>
     <!-- Suggestions (affiché même si panier vide) -->
-    <div style="margin-top: 6rem;">
-        <h2 style="font-weight: bold; margin-bottom: 2rem; text-transform: uppercase; font-size: 1.2rem;">Suggestions</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+    <section class="suggestionsSection" style="padding: 6rem 0 2rem 0; background-color: transparent;">
+        <h3 class="suggestionsTitle">SUGGESTIONS</h3>
+        <div class="suggestionsGrid">
             <?php foreach($suggestions as $sugg): ?>
-                <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $sugg['id']; ?>" style="text-decoration: none; color: inherit; display: block;">
-                    <img src="<?= BASE_URL . htmlspecialchars($sugg['image_url'] ?? 'img/default.jpg') ?>" style="width: 100%; height: 280px; object-fit: cover; background-color: #f5f5f4; margin-bottom: 0.5rem;" alt="">
-                    <h3 style="font-size: 0.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 0.2rem;"><?php echo htmlspecialchars($sugg['name']); ?></h3>
-                    <p style="font-size: 0.8rem; font-weight: bold;"><?php echo number_format($sugg['price'], 2, ',', ' '); ?> EUR</p>
-                </a>
+                <div class="suggestionCardFake">
+                    <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $sugg['id']; ?>" class="suggestionImageLink">
+                        <img src="<?= BASE_URL . htmlspecialchars($sugg['image_url'] ?? 'img/default.jpg') ?>" class="suggestionImage" alt="">
+                    </a>
+                    <div class="suggestionInfo">
+                        <div>
+                            <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $sugg['id']; ?>" style="text-decoration: none; color: inherit;">
+                                <p class="suggestionName"><?php echo htmlspecialchars($sugg['name']); ?></p>
+                            </a>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="suggestionPrice"><?php echo number_format($sugg['price'], 2, ',', ' '); ?> EUR</span>
+                            <?php $isFavSugg = in_array($sugg['id'], $userFavorites); ?>
+                            <button type="button" class="favoriteBtn" data-id="<?php echo $sugg['id']; ?>" onclick="toggleFavorite(event, <?php echo $sugg['id']; ?>)">
+                                <?php if ($isFavSugg): ?>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon is-favorite"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <?php else: ?>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <?php endif; ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             <?php endforeach; ?>
         </div>
-    </div>
+    </section>
 </div>
 
 <?php include BASE_PATH . 'includes/footer.php'; ?>
