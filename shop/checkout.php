@@ -83,13 +83,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $invoice_id = $mysqli->insert_id; 
 
             
-            $sqlCartItems = "SELECT cart.article_id, cart.quantity, article.price FROM cart JOIN article ON cart.article_id = article.id WHERE cart.user_id = $user_id";
+            $sqlCartItems = "SELECT cart.article_id, cart.quantity, cart.size, article.price FROM cart JOIN article ON cart.article_id = article.id WHERE cart.user_id = $user_id";
             $resCartItems = $mysqli->query($sqlCartItems);
             if ($resCartItems && $resCartItems->num_rows > 0) {
-                $stmtItem = $mysqli->prepare("INSERT INTO invoice_item (invoice_id, article_id, quantity, price) VALUES (?, ?, ?, ?)");
+                $stmtItem = $mysqli->prepare("INSERT INTO invoice_item (invoice_id, article_id, quantity, size, price) VALUES (?, ?, ?, ?, ?)");
                 while ($cItem = $resCartItems->fetch_assoc()) {
-                    $stmtItem->bind_param("iiid", $invoice_id, $cItem['article_id'], $cItem['quantity'], $cItem['price']);
+                    $stmtItem->bind_param("iiisd", $invoice_id, $cItem['article_id'], $cItem['quantity'], $cItem['size'], $cItem['price']);
                     $stmtItem->execute();
+
+                    
+                    $sizeColumn = "quant_" . strtolower($cItem['size']);
+                    $mysqli->query("UPDATE stock SET $sizeColumn = $sizeColumn - " . intval($cItem['quantity']) . " WHERE article_id = " . intval($cItem['article_id']));
                 }
             }
 

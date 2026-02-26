@@ -118,6 +118,9 @@ $pdf->Cell(30,8,'TOTAL',1,1,'C',true);
 $pdf->SetFont('Arial','',10);
 foreach($items as $item) {
     $name = utf8_decode($item['name'] ? $item['name'] : 'Article supprimé');
+    if (!empty($item['size'])) {
+        $name .= ' (' . $item['size'] . ')';
+    }
     $pdf->Cell(20,8,$item['quantity'],1,0,'C');
     $pdf->Cell(110,8,$name,1,0,'L');
     $pdf->Cell(30,8,number_format($item['price'], 2, ',', ' ') . ' ' . chr(128),1,0,'R');
