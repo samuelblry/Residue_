@@ -47,7 +47,14 @@ Le projet utilise plusieurs tables relationnelles pour gérer la boutique :
    - Créez une base de données MySQL nommée `residue_`.
    - Importez le fichier SQL fourni `residue_.sql` via phpMyAdmin ou en ligne de commande.
 5. **Configuration Back-end :**
-   - Vérifiez et adaptez les identifiants de connexion à la base de données dans le fichier `includes/db.php` si nécessaire. (Par défaut : `root` sans mot de passe).
+    - Créez un fichier `.env` à la racine du projet en vous basant sur l'exemple suivant :
+      ```env
+      DB_HOST=your_host
+      DB_USER=your_user
+      DB_PASS=your_password
+      DB_NAME=your_db_name
+      ```
+    - Les paramètres de connexion sont automatiquement chargés via `includes/db.php`.
 
 ## ✅ Validation et Qualité
 * **Sécurité :** Protections contre l'injection SQL (requêtes préparées) et les attaques XSS. Mots de passe chiffrés avec `password_hash()`.
