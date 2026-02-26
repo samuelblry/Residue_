@@ -36,12 +36,12 @@ include BASE_PATH . 'includes/header.php';
 ?>
 
 <div class="loginPageContainer leftAligned">
-    <!-- Image de fond -->
+    
     <div class="loginBackground">
         <img src="<?= BASE_URL ?>img/background/fondMontagnes.png" alt="Paysage Montagnes Residue">
     </div>
 
-    <!-- Panneau vitré à gauche -->
+    
     <div class="loginPanel">
         <div class="loginContent">
             <h1 class="loginTitle">INSCRIPTION</h1>
@@ -54,7 +54,7 @@ include BASE_PATH . 'includes/header.php';
             <?php endif; ?>
 
             <form action="<?= BASE_URL ?>auth/register.php" method="POST" class="loginForm">
-                <!-- Champs visuels uniquement pour coller à la maquette (Non stockés par défaut) -->
+                
                 <div class="loginFormGroup">
                     <input type="text" id="nom" name="nom" placeholder="NOM">
                 </div>
@@ -62,7 +62,7 @@ include BASE_PATH . 'includes/header.php';
                     <input type="text" id="prenom" name="prenom" placeholder="PRENOM">
                 </div>
                 
-                <!-- Champs fonctionnels stockés en DB -->
+                
                 <div class="loginFormGroup">
                     <input type="text" id="username" name="username" placeholder="PSEUDO" required>
                 </div>
@@ -87,8 +87,8 @@ include BASE_PATH . 'includes/header.php';
 </div>
 
 <script>
-    // Permet de calculer dynamiquement la hauteur exacte du header pour que
-    // la carte en verre s'arrête obligatoirement ET parfaitement en dessous
+    
+    
     function alignGlassPanel() {
         const header = document.getElementById('navBar');
         const panel = document.querySelector('.loginPanel');
@@ -97,11 +97,11 @@ include BASE_PATH . 'includes/header.php';
             const headerHeight = header.offsetHeight;
             panel.style.marginTop = headerHeight + 'px';
             panel.style.minHeight = `calc(100vh - ${headerHeight}px)`;
-            panel.style.height = 'auto'; // Permet de grandir
+            panel.style.height = 'auto'; 
         }
     }
 
-    // Exécuter au chargement et si la taille de la fenêtre change
+    
     window.addEventListener('DOMContentLoaded', alignGlassPanel);
     window.addEventListener('resize', alignGlassPanel);
     window.addEventListener('load', alignGlassPanel);

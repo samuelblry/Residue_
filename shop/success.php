@@ -13,17 +13,17 @@ include BASE_PATH . 'includes/header.php';
 ?>
 
 <div class="loginPageContainer leftAligned">
-    <!-- Image de fond -->
+    
     <div class="loginBackground">
         <img src="<?= BASE_URL ?>img/background/fondPontDesert.png" alt="Paysage Desert Residue">
     </div>
 
-    <!-- Panneau vitré à gauche (réutilisation des classes de la page login) -->
+    
     <div class="loginPanel">
         <div class="loginContent" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; padding: 4rem 2rem;">
             
             <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 4rem; width: 100%;">
-                <!-- Cercle blanc avec icône SVG -->
+                
                 <div style="background-color: white; border-radius: 50%; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#57534e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #1c1917;">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -53,7 +53,7 @@ include BASE_PATH . 'includes/header.php';
 </div>
 
 <script>
-    // Récupération de la fonction d'alignement de login.php pour la cohérence
+    
     function alignGlassPanel() {
         const header = document.getElementById('navBar');
         const panel = document.querySelector('.loginPanel');

@@ -30,20 +30,20 @@ body {
     overflow-x: hidden;
     min-height: 100vh;
     cursor: default;
-    /* We will use a custom follower */
+    
 }
 
-/* Add padding for pages without a hero image background to avoid content hiding behind fixed nav */
+
 body.page-with-nav-space {
     padding-top: 130px;
-    /* Adjust this value if navbar height changes */
+    
 }
 
 html {
     scroll-behavior: smooth;
 }
 
-/* CUSTOM CURSOR */
+
 .cursor-dot,
 .cursor-outline {
     position: fixed;
@@ -68,7 +68,7 @@ html {
     transition: width 0.2s, height 0.2s, background-color 0.2s;
 }
 
-/* SCROLL ANIMATIONS */
+
 .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -122,10 +122,10 @@ ol {
 }
 
 
-/* PAGE D'ACCEUIL */
 
 
-/* BANDEAU */
+
+
 
 .topBanner:hover .scrollingText,
 .topBanner:focus-within .scrollingText {
@@ -173,7 +173,7 @@ ol {
 }
 
 
-/* NAV BAR */
+
 
 
 .navBar {
@@ -397,7 +397,7 @@ ol {
 }
 
 
-/* SECTION HERO */
+
 
 
 .heroSection {
@@ -533,7 +533,7 @@ ol {
 }
 
 
-/* ARTICLES */
+
 
 
 .shopSection {
@@ -636,7 +636,7 @@ ol {
 }
 
 
-/* CARTE PRODUIT */
+
 
 
 .productCard {
@@ -753,7 +753,7 @@ ol {
 }
 
 
-/* CATEGORY */
+
 
 
 .CategoryMenu {
@@ -784,7 +784,7 @@ ol {
 }
 
 
-/* MANIFESTO */
+
 
 
 .backgroundSocialMedia {
@@ -927,7 +927,7 @@ ol {
 
 
 
-/* PAGE ARTICLE */
+
 
 
 
@@ -938,7 +938,7 @@ ol {
     margin: 0;
 }
 
-/* Grille d'images (gauche) */
+
 .articleImagesGrid {
     width: 65%;
     display: grid;
@@ -947,7 +947,7 @@ ol {
     background-color: #f4f4f0;
 }
 
-/* Pour le 5ème élément, s'il y en a 5, il se place en bas à gauche */
+
 .articleImagesGrid .gridImageWrapper:nth-child(5) {
     grid-column: 1 / 2;
 }
@@ -969,7 +969,7 @@ ol {
     min-height: 80vh;
 }
 
-/* Détails collants (droite) */
+
 .articleDetailsStickyContainer {
     width: 35%;
     position: relative;
@@ -1142,7 +1142,7 @@ ol {
     text-transform: uppercase;
     cursor: pointer;
     list-style: none;
-    /* remove default arrow */
+    
 }
 
 .accordion summary::-webkit-details-marker {
@@ -1168,7 +1168,7 @@ ol {
     margin-left: 0;
 }
 
-/* Suggestions Section */
+
 .suggestionsSection {
     padding: 4rem 2rem;
     background-color: #f4f4f0;
@@ -1243,7 +1243,7 @@ ol {
 }
 
 
-/* PRESENTATION USINE */
+
 
 
 .factoryPresentation {
@@ -1289,7 +1289,7 @@ ol {
 
 
 
-/* PAGE CONTACT */
+
 
 
 
@@ -1471,7 +1471,7 @@ ol {
 
 
 
-/* PAGE ERROR */
+
 
 
 .presentationBrand {
@@ -1497,7 +1497,7 @@ ol {
 
 
 
-/* PAGE ERROR */
+
 
 
 
@@ -1509,13 +1509,13 @@ ol {
     text-align: center;
 }
 
-/* ACCOUNT PAGE - FIGMA MOCKUP */
+
 .accountContainer {
     max-width: 1400px;
-    /* Increased from 1200px */
+    
     margin: 4rem auto;
     padding: 0 4rem;
-    /* Matching the mockup side padding */
+    
     font-family: 'Inter', sans-serif;
     color: #1c1917;
 }
@@ -1527,10 +1527,10 @@ ol {
     margin-bottom: 3rem;
 }
 
-/* Modal Popup pour Recharger */
+
 .rechargeModal {
     display: none;
-    /* Hidden by default */
+    
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -1539,7 +1539,7 @@ ol {
     height: 100%;
     overflow: auto;
     background-color: rgba(28, 25, 23, 0.4);
-    /* #1c1917 at 40% opacity for grey overlay */
+    
     backdrop-filter: blur(2px);
     align-items: center;
     justify-content: center;
@@ -1606,7 +1606,7 @@ ol {
     border-color: #dc2626;
 }
 
-/* Identité, Données, Porte-Monnaie */
+
 .accountTopGrid {
     display: grid;
     grid-template-columns: 150px 1fr 1fr 1fr;
@@ -1675,7 +1675,7 @@ ol {
     border-color: #1c1917;
 }
 
-/* Sections communes */
+
 .accountSectionHeader {
     display: flex;
     justify-content: space-between;
@@ -1707,7 +1707,7 @@ ol {
     color: #fff;
 }
 
-/* Grid d'articles */
+
 .accountArticlesGrid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -1779,7 +1779,7 @@ ol {
     background: #1c1917;
 }
 
-/* Commandes */
+
 .orderBlock {
     margin-bottom: 3rem;
 }
@@ -1820,9 +1820,9 @@ ol {
     color: #fff;
 }
 
-/* ========================================================================= */
-/* FILTER SIDEBAR STYLES */
-/* ========================================================================= */
+
+
+
 
 .filterOverlay {
     position: fixed;
@@ -1831,7 +1831,7 @@ ol {
     width: 100vw;
     height: 100vh;
     background: rgba(28, 25, 23, 0.5);
-    /* #1c1917 at 50% opacity */
+    
     backdrop-filter: blur(2px);
     z-index: 1040;
     opacity: 0;
@@ -1848,13 +1848,13 @@ ol {
     position: fixed;
     top: 0;
     right: -100%;
-    /* Hidden off-screen to the right by default */
+    
     width: 100%;
     max-width: 400px;
-    /* Sidebar width */
+    
     height: 100vh;
     background-color: #f4f4f0;
-    /* Match Residue background */
+    
     z-index: 1050;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease-in-out;
@@ -1865,7 +1865,7 @@ ol {
 
 .filterSidebar.active {
     right: 0;
-    /* Slide in smoothly */
+    
 }
 
 .filterSidebarHeader {
@@ -1901,7 +1901,7 @@ ol {
     padding-bottom: 2rem;
 }
 
-/* Custom Checkbox and Radio styling matching Residue theme */
+
 .filterRadioLabel,
 .filterCheckboxLabel {
     position: relative;
@@ -1937,13 +1937,13 @@ ol {
 
 .btnApplyFilters:hover {
     background-color: #dc2626;
-    /* Residue Red */
+    
     border-color: #dc2626;
 }
 
-/* ========================================================================= */
-/* SORTING & FILTER BUTTONS ROW (SHOP.PHP) */
-/* ========================================================================= */
+
+
+
 
 .catalogHeaderRight {
     display: flex;
@@ -1997,9 +1997,9 @@ ol {
     color: #1c1917;
 }
 
-/* ========================================================================= */
-/* FAVORITES COMPONENT STYLES */
-/* ========================================================================= */
+
+
+
 
 .favoriteBtn {
     background: transparent;

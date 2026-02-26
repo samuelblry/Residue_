@@ -17,10 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = isset($_POST['category']) ? mysqli_real_escape_string($mysqli, $_POST['category']) : 'Autre';
     $author_id = $_SESSION['user_id'];
     
-    // Traitement des stocks par taille
+    
     $stocks = isset($_POST['stock']) ? $_POST['stock'] : [];
     
-    // On peut avoir une validation basique : un article doit avoir au moins 1 stock dans n'importe quelle taille
+    
     $total_stock = 0;
     foreach($stocks as $qty) {
         $total_stock += intval($qty);
@@ -131,12 +131,12 @@ include BASE_PATH . 'includes/header.php';
     <?php endif; ?>
 
     <div class="addArticleGrid">
-        <!-- Colonne Gauche : Upload Image (Grille) -->
+        
         <div class="addArticleLeft">
             <input type="file" id="articleImage" name="images[]" multiple class="hiddenInput" accept="image/png, image/jpeg, image/webp">
             
             <div class="articleImagesGrid" id="previewGrid">
-                <!-- Zone de dépôt / Bouton d'ajout initial -->
+                
                 <div class="gridImageWrapper imageDropzone" id="dropzonePrimary">
                     <div class="dropzoneContent">
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -148,21 +148,21 @@ include BASE_PATH . 'includes/header.php';
                         </svg>
                     </div>
                 </div>
-                <!-- Placeholder initial vide -->
+                
                 <div class="gridImageWrapper placeholderImage" id="initialPlaceholder"></div>
             </div>
         </div>
 
-        <!-- Colonne Droite : Formulaire -->
+        
         <div class="addArticleRight">
             
             <div class="editGroup">
-                <!-- Inputs mockés en "plain text" -->
+                
                 <input type="text" name="name" class="editableInput titleInput" placeholder="TITRE DE L'ARTICLE" required>
                 <span class="editIcon">✎</span>
             </div>
             <div class="editGroup priceWrapper">
-                <!-- Prix avec EUR fixe à côté -->
+                
                 <input type="number" name="price" step="0.01" class="editableInput priceInput" placeholder="XX" required>
                 <span class="currencySuffix">EUR</span>
             </div>
@@ -200,7 +200,7 @@ include BASE_PATH . 'includes/header.php';
                 <div class="sectionHeader" style="margin-bottom: 1rem; width: 100%;">STOCK PAR TAILLE</div>
                 
                 <div id="stockLinesWrapper" style="width: 100%;">
-                    <!-- Les lignes s'affichent ou se cachent selon les tailles sélectionnées -->
+                    
                     <?php 
                     $sizes = ['XS', 'S', 'M', 'L', 'XL'];
                     foreach($sizes as $s): 
@@ -268,12 +268,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const previewGrid = document.getElementById('previewGrid');
     const fileInput = document.getElementById('articleImage');
     
-    // Contenu HTML du bouton "Ajouter une image"
+    
     const addMoreHTML = '<div class="dropzoneContent"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg></div>';
 
-    let allFiles = []; // Pour stocker tous les fichiers accumulés
+    let allFiles = []; 
 
-    // Clic initial sur la zone principale
+    
     document.getElementById('dropzonePrimary').addEventListener('click', function() {
         fileInput.click();
     });
@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fileInput.addEventListener('change', function() {
         if (!this.files || this.files.length === 0) return;
 
-        // Ajouter les nouveaux fichiers au tableau existant
+        
         Array.from(this.files).forEach(file => {
             allFiles.push(file);
         });
@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", function() {
             div.draggable = true;
             div.dataset.index = index;
             div.style.cursor = 'grab';
-            div.style.position = 'relative'; // Pour positionner le bouton de suppression
+            div.style.position = 'relative'; 
             
             const img = document.createElement('img');
             img.src = URL.createObjectURL(file);
@@ -314,20 +314,20 @@ document.addEventListener("DOMContentLoaded", function() {
             img.style.objectFit = 'cover';
             div.appendChild(img);
 
-            // Bouton de suppression (X)
+            
             const removeBtn = document.createElement('button');
             removeBtn.innerHTML = '✕';
             removeBtn.className = 'removeImageBtn';
             removeBtn.type = 'button';
             removeBtn.addEventListener('click', function(e) {
-                e.stopPropagation(); // Évite de déclencher le drag ou le clic éventuel derrière
+                e.stopPropagation(); 
                 allFiles.splice(index, 1);
                 updateFileInput();
                 renderGrid();
             });
             div.appendChild(removeBtn);
 
-            // Drag Events
+            
             div.addEventListener('dragstart', handleDragStart);
             div.addEventListener('dragover', handleDragOver);
             div.addEventListener('drop', handleDrop);
@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function() {
             previewGrid.appendChild(div);
         });
 
-        // Bouton d'ajout à la fin
+        
         const addMoreDiv = document.createElement('div');
         addMoreDiv.className = 'gridImageWrapper imageDropzone';
         addMoreDiv.style.cursor = 'pointer';
@@ -347,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         previewGrid.appendChild(addMoreDiv);
 
-        // Si la page est vidée, remettre le placeholder
+        
         if (allFiles.length === 0) {
             const placeholder = document.createElement('div');
             placeholder.className = 'gridImageWrapper placeholderImage';
@@ -397,37 +397,37 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 2. Gestion dynamique des Tailles et Stocks
+    
     const sizeBtns = document.querySelectorAll('.sizeBtn.selectable');
     const noSizeMsg = document.getElementById('noSizeSelectedMsg');
     
-    // Fonctionnalité de sélection de taille
+    
     sizeBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            this.classList.toggle('selected'); // Ajoute/retire la classe .selected (noire)
+            this.classList.toggle('selected'); 
             
             const size = this.dataset.size;
             const stockLine = document.getElementById('stockLine-' + size);
             const stockInput = stockLine.querySelector('input');
             
             if (this.classList.contains('selected')) {
-                // Afficher la ligne de stock associée
+                
                 stockLine.style.display = 'flex';
-                // Mettre à 1 par défaut quand on sélectionne une nouvelle taille si elle était à 0
+                
                 if(stockInput.value === "0" || stockInput.value === "") stockInput.value = 1; 
             } else {
-                // Cacher et remettre à 0
+                
                 stockLine.style.display = 'none';
                 stockInput.value = 0;
             }
             
-            // Afficher/Cacher le message global "Sélectionnez une taille"
+            
             const anySelected = document.querySelectorAll('.sizeBtn.selectable.selected').length > 0;
             noSizeMsg.style.display = anySelected ? 'none' : 'block';
         });
     });
 
-    // 3. Gestion des accordéons
+    
     const accordions = document.querySelectorAll('.accordionHeader');
     accordions.forEach(acc => {
         acc.addEventListener('click', function() {

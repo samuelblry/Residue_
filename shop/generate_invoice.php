@@ -15,7 +15,7 @@ if ($invoice_id === 0) {
     die("ID de facture invalide.");
 }
 
-// Vérifier que l'utilisateur a le droit de voir cette facture (soit c'est la sienne, soit il est admin)
+
 $role = $_SESSION['role'] ?? 'user';
 $sql = "SELECT * FROM invoice WHERE id = ?";
 if ($role !== 'admin') {
@@ -33,7 +33,7 @@ if ($result->num_rows === 0) {
 
 $invoice = $result->fetch_assoc();
 
-// Récupérer les articles
+
 $stmtItems = $mysqli->prepare("SELECT ii.*, a.name FROM invoice_item ii LEFT JOIN article a ON ii.article_id = a.id WHERE ii.invoice_id = ?");
 $stmtItems->bind_param("i", $invoice_id);
 $stmtItems->execute();
@@ -47,14 +47,14 @@ while ($row = $itemsResult->fetch_assoc()) {
 
 $delivery_fee = $invoice['amount'] - $totalItems;
 
-// Génération du PDF
+
 class PDF extends FPDF {
     function Header() {
-        // Logo RESIDUE_ Textuel
+        
         $this->SetFont('Arial','B',24);
         $this->Cell(80,10,'RESIDUE_',0,0,'L');
         
-        // Titre Facture
+        
         $this->SetFont('Arial','B',15);
         $this->Cell(110,10,'FACTURE',0,1,'R');
         $this->Ln(10);
@@ -71,13 +71,13 @@ $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
 
-// Infos Facture
+
 $pdf->SetFont('Arial','B',12);
 $pdf->Cell(100,6,utf8_decode('Facture N°: ') . str_pad($invoice['id'], 5, '0', STR_PAD_LEFT), 0, 0);
 $pdf->Cell(90,6,'Date: ' . date('d/m/Y', strtotime($invoice['transaction_date'])), 0, 1, 'R');
 $pdf->Ln(10);
 
-// Adresses
+
 $pdf->SetFont('Arial','B',10);
 $pdf->Cell(95,6,'Informations de Facturation',0,0,'L');
 $pdf->Cell(95,6,'Informations de Livraison',0,1,'L');
@@ -107,7 +107,7 @@ if (!empty($invoice['additional_instructions'])) {
     $pdf->Ln(5);
 }
 
-// Tableau des articles
+
 $pdf->SetFont('Arial','B',10);
 $pdf->SetFillColor(240,240,240);
 $pdf->Cell(20,8,'QTE',1,0,'C',true);
@@ -125,7 +125,7 @@ foreach($items as $item) {
 }
 $pdf->Ln();
 
-// Récapitulatif
+
 $pdf->SetFont('Arial','B',10);
 $pdf->Cell(130,8,'',0,0);
 $pdf->Cell(30,8,'Sous-total',1,0,'R',true);

@@ -1,11 +1,5 @@
 <?php
-/*******************************************************************************
-* Utility to generate font definition files                                    *
-*                                                                              *
-* Version: 1.31                                                                *
-* Date:    2019-12-07                                                          *
-* Author:  Olivier PLATHEY                                                     *
-*******************************************************************************/
+
 
 require('ttfparser.php');
 
@@ -61,7 +55,7 @@ function LoadMap($enc)
 
 function GetInfoFromTrueType($file, $embed, $subset, $map)
 {
-	// Return information from a TrueType font
+	
 	try
 	{
 		$ttf = new TTFParser($file);
@@ -123,19 +117,19 @@ function GetInfoFromTrueType($file, $embed, $subset, $map)
 
 function GetInfoFromType1($file, $embed, $map)
 {
-	// Return information from a Type1 font
+	
 	if($embed)
 	{
 		$f = fopen($file, 'rb');
 		if(!$f)
 			Error('Can\'t open font file');
-		// Read first segment
+		
 		$a = unpack('Cmarker/Ctype/Vsize', fread($f,6));
 		if($a['marker']!=128)
 			Error('Font file is not a valid binary Type1');
 		$size1 = $a['size'];
 		$data = fread($f, $size1);
-		// Read second segment
+		
 		$a = unpack('Cmarker/Ctype/Vsize', fread($f,6));
 		if($a['marker']!=128)
 			Error('Font file is not a valid binary Type1');
@@ -217,16 +211,16 @@ function GetInfoFromType1($file, $embed, $map)
 
 function MakeFontDescriptor($info)
 {
-	// Ascent
+	
 	$fd = "array('Ascent'=>".$info['Ascender'];
-	// Descent
+	
 	$fd .= ",'Descent'=>".$info['Descender'];
-	// CapHeight
+	
 	if(!empty($info['CapHeight']))
 		$fd .= ",'CapHeight'=>".$info['CapHeight'];
 	else
 		$fd .= ",'CapHeight'=>".$info['Ascender'];
-	// Flags
+	
 	$flags = 0;
 	if($info['IsFixedPitch'])
 		$flags += 1<<0;
@@ -234,12 +228,12 @@ function MakeFontDescriptor($info)
 	if($info['ItalicAngle']!=0)
 		$flags += 1<<6;
 	$fd .= ",'Flags'=>".$flags;
-	// FontBBox
+	
 	$fbb = $info['FontBBox'];
 	$fd .= ",'FontBBox'=>'[".$fbb[0].' '.$fbb[1].' '.$fbb[2].' '.$fbb[3]."]'";
-	// ItalicAngle
+	
 	$fd .= ",'ItalicAngle'=>".$info['ItalicAngle'];
-	// StemV
+	
 	if(isset($info['StdVW']))
 		$stemv = $info['StdVW'];
 	elseif($info['Bold'])
@@ -247,7 +241,7 @@ function MakeFontDescriptor($info)
 	else
 		$stemv = 70;
 	$fd .= ",'StemV'=>".$stemv;
-	// MissingWidth
+	
 	$fd .= ",'MissingWidth'=>".$info['MissingWidth'].')';
 	return $fd;
 }
@@ -277,7 +271,7 @@ function MakeWidthArray($widths)
 
 function MakeFontEncoding($map)
 {
-	// Build differences from reference encoding
+	
 	$ref = LoadMap('cp1252');
 	$s = '';
 	$last = 0;
@@ -296,7 +290,7 @@ function MakeFontEncoding($map)
 
 function MakeUnicodeArray($map)
 {
-	// Build mapping to Unicode values
+	
 	$ranges = array();
 	foreach($map as $c=>$v)
 	{
@@ -383,7 +377,7 @@ function MakeDefinitionFile($file, $type, $enc, $embed, $subset, $map, $info)
 
 function MakeFont($fontfile, $enc='cp1252', $embed=true, $subset=true)
 {
-	// Generate a font definition file
+	
 	if(!file_exists($fontfile))
 		Error('Font file not found: '.$fontfile);
 	$ext = strtolower(substr($fontfile,-3));
@@ -425,7 +419,7 @@ function MakeFont($fontfile, $enc='cp1252', $embed=true, $subset=true)
 
 if(PHP_SAPI=='cli')
 {
-	// Command-line interface
+	
 	ini_set('log_errors', '0');
 	if($argc==1)
 		die("Usage: php makefont.php fontfile [encoding] [embed] [subset]\n");

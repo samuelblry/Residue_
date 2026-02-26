@@ -2,7 +2,7 @@
 require_once 'includes/db.php'; 
 include 'includes/header.php'; 
 
-// Fetch 4 random articles for the suggestions section
+
 $suggestionsResult = $mysqli->query("
     SELECT a.id, a.name, a.price, 
            (SELECT url FROM image WHERE article_id = a.id AND is_main = 1 LIMIT 1) as main_image
@@ -65,7 +65,7 @@ if ($suggestionsResult) {
     <div class="separationCategoryArticle" style="margin-bottom: 3rem;"></div>
 
 <?php
-// Fetch user favorites for suggestions toggle state
+
 $userFavorites = [];
 if (isset($_SESSION['user_id'])) {
     $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));

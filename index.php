@@ -2,7 +2,7 @@
 if(session_status() === PHP_SESSION_NONE) session_start();
 require_once 'includes/db.php';
 
-// Gestion de la recherche et des catégories
+
 $whereClauses = [];
 $params = [];
 $types = "";
@@ -27,7 +27,7 @@ if (!empty($whereClauses)) {
     $whereSQL = " WHERE " . implode(" AND ", $whereClauses);
 }
 
-// Requête pour NOUVEAUTÉS (publié il y a moins de 7 jours)
+
 $sqlNew = "SELECT Article.id, Article.name, Article.price, Image.url AS image_url, 
            (SELECT url FROM Image WHERE article_id = Article.id AND is_main = 0 LIMIT 1) AS hover_image_url
            FROM Article 
@@ -50,8 +50,8 @@ if ($resultNew && $resultNew->num_rows > 0) {
     }
 }
 
-// Requête pour BEST SELLERS (top 5 des articles les plus vendus calculé grâce à invoice_item)
-// Si aucune recherche ni catégorie n'est appliquée, on prend juste les meilleures ventes
+
+
 $sqlBestsellers = "SELECT Article.id, Article.name, Article.price, Image.url AS image_url, 
                    (SELECT url FROM Image WHERE article_id = Article.id AND is_main = 0 LIMIT 1) AS hover_image_url,
                    COALESCE(SUM(invoice_item.quantity), 0) as total_sold
@@ -77,7 +77,7 @@ if ($resultBest && $resultBest->num_rows > 0) {
 }
 }
 
-// Fetch user favorites for toggle state
+
 $userFavorites = [];
 if (isset($_SESSION['user_id'])) {
     $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));

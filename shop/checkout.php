@@ -11,7 +11,7 @@ $user_id = $_SESSION['user_id'];
 $error = "";
 $success = "";
 
-// 1. Calcul du total du panier et récupération des articles
+
 $sqlCart = "SELECT cart.id as cart_id, cart.quantity, cart.size, article.id as article_id, article.name, article.price, 
                    (SELECT url FROM image WHERE article_id = article.id AND is_main = 1 LIMIT 1) as image_url 
             FROM cart 
@@ -32,27 +32,27 @@ if ($totalCart == 0 && empty($success)) {
     exit();
 }
 
-// Frais de livraison (depuis la session, ou défaut)
+
 $delivery_fee = isset($_SESSION['delivery_fee']) ? $_SESSION['delivery_fee'] : 5.99;
 $total = $totalCart + $delivery_fee;
 
-// Récupérer le solde de l'utilisateur
+
 $sqlUser = "SELECT balance FROM user WHERE id = $user_id";
 $resUser = $mysqli->query($sqlUser);
 $userRow = $resUser->fetch_assoc();
 $balance = floatval($userRow['balance']);
 $newBalance = $balance - $total;
 
-// 2. Traitement du paiement
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Delivery info (not saved in DB for this simple version, but could be)
+    
     $del_prenom = mysqli_real_escape_string($mysqli, $_POST['del_prenom'] ?? '');
     $del_nom = mysqli_real_escape_string($mysqli, $_POST['del_nom'] ?? '');
     $del_address = mysqli_real_escape_string($mysqli, $_POST['del_address'] ?? '');
     $del_zipcode = mysqli_real_escape_string($mysqli, $_POST['del_zipcode'] ?? '');
     $del_city = mysqli_real_escape_string($mysqli, $_POST['del_city'] ?? '');
     
-    // Billing info (used for invoice)
+    
     $address = mysqli_real_escape_string($mysqli, $_POST['bill_address'] ?? $_POST['address'] ?? '');
     $city = mysqli_real_escape_string($mysqli, $_POST['bill_city'] ?? $_POST['city'] ?? '');
     $zipcode = mysqli_real_escape_string($mysqli, $_POST['bill_zipcode'] ?? $_POST['zipcode'] ?? '');
@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($balance >= $total) {
         $mysqli->begin_transaction();
         try {
-            // Récupération complète des champs pour la BDD
+            
             $bill_prenom = mysqli_real_escape_string($mysqli, $_POST['bill_prenom'] ?? '');
             $bill_nom = mysqli_real_escape_string($mysqli, $_POST['bill_nom'] ?? '');
             $bill_country = mysqli_real_escape_string($mysqli, $_POST['bill_country'] ?? '');
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $del_country = mysqli_real_escape_string($mysqli, $_POST['del_country'] ?? '');
             $del_instructions = mysqli_real_escape_string($mysqli, $_POST['del_instructions'] ?? '');
 
-            // Créer la facture avec toutes les nouvelles colonnes
+            
             $stmt = $mysqli->prepare("INSERT INTO invoice 
                 (user_id, amount, billing_firstname, billing_lastname, billing_address, billing_city, billing_zipcode, billing_country, 
                  shipping_firstname, shipping_lastname, shipping_address, shipping_zipcode, shipping_city, shipping_country, additional_instructions) 
@@ -80,9 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             );
             $stmt->execute();
 
-            $invoice_id = $mysqli->insert_id; // On récupère l'ID de la facture nouvellement créée
+            $invoice_id = $mysqli->insert_id; 
 
-            // Ajouter les articles de la facture dans la table invoice_item
+            
             $sqlCartItems = "SELECT cart.article_id, cart.quantity, article.price FROM cart JOIN article ON cart.article_id = article.id WHERE cart.user_id = $user_id";
             $resCartItems = $mysqli->query($sqlCartItems);
             if ($resCartItems && $resCartItems->num_rows > 0) {
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
 
-            // Vider le panier
+            
             $mysqli->query("DELETE FROM cart WHERE user_id = $user_id");
 
             $mysqli->commit();

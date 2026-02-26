@@ -20,7 +20,7 @@ if (isset($_GET['id']) && intval($_GET['id']) !== $current_user_id) {
 $success = "";
 $error = "";
 
-// Traitement des formulaires (seulement si c'est notre propre compte)
+
 if ($is_own_account && $_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
@@ -39,7 +39,7 @@ if ($is_own_account && $_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 $update_query = "UPDATE user SET username='$new_pseudo', prenom='$new_prenom', nom='$new_nom', email='$new_email'";
                 
-                // Modification du mot de passe
+                
                 if (!empty($_POST['new_password']) || !empty($_POST['current_password']) || !empty($_POST['confirm_new_password'])) {
                     if (empty($_POST['current_password']) || empty($_POST['new_password']) || empty($_POST['confirm_new_password'])) {
                         $error = "Veuillez remplir tous les champs de mot de passe pour le modifier.";
@@ -89,7 +89,7 @@ if ($is_own_account && $_SERVER["REQUEST_METHOD"] == "POST") {
                             $destination = $uploadDir . $newFilename;
 
                             if (move_uploaded_file($tmpName, $destination)) {
-                                // Mettre à jour la base de données
+                                
                                 $stmt = $mysqli->prepare("UPDATE user SET profile_pic=? WHERE id=?");
                                 $stmt->bind_param("si", $newFilename, $user_id);
                                 if ($stmt->execute()) {
@@ -123,7 +123,7 @@ if ($is_own_account && $_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Récupérer les infos actuelles de l'utilisateur visé
+
 $resUser = $mysqli->query("SELECT * FROM user WHERE id=$user_id");
 if ($resUser->num_rows === 0) {
     header("Location: " . BASE_URL . "index.php");
@@ -131,14 +131,14 @@ if ($resUser->num_rows === 0) {
 }
 $user = $resUser->fetch_assoc();
 
-// Extraire prenom et nom (avec fallback s'ils n'existent pas)
+
 $userPrenom = $user['prenom'] ?? $user['first_name'] ?? 'PRENOMUSER';
 $userNom = $user['nom'] ?? $user['last_name'] ?? 'NOMUSER';
 $userPseudo = $user['username'] ?? 'USER123';
 $userEmail = $user['email'] ?? 'USER123@GMAIL.COM';
 $userBalance = number_format($user['balance'], 2, ',', ' ');
 
-// Récupérer les articles mis en vente par l'utilisateur visé
+
 $articlesVendus = [];
 $resArticles = $mysqli->query("SELECT Article.id, Article.name, Article.price, Image.url AS image_url 
                                FROM article 
@@ -150,7 +150,7 @@ if ($resArticles && $resArticles->num_rows > 0) {
     }
 }
 
-// Récupérer l'historique des transactions SI c'est notre propre compte
+
 $invoices = [];
 if ($is_own_account) {
     $resInvoices = $mysqli->query("SELECT id, transaction_date, amount FROM invoice WHERE user_id=$user_id ORDER BY transaction_date DESC");
@@ -161,7 +161,7 @@ if ($is_own_account) {
         }
     }
 
-    // Récupérer les articles des factures
+    
     if (!empty($invoices)) {
         $invoice_ids = implode(',', array_keys($invoices));
         $sqlItems = "SELECT invoice_item.invoice_id, invoice_item.quantity, invoice_item.price, article.id as article_id, article.name, image.url as image_url 
@@ -191,7 +191,7 @@ include BASE_PATH . 'includes/header.php';
         <div style="color: #16a34a; margin-bottom: 1rem; font-weight: bold; font-size: 0.8rem; text-transform: uppercase;"><?php echo htmlspecialchars($success); ?></div>
     <?php endif; ?>
 
-    <!-- Identité, Données, Porte-Monnaie -->
+    
     <div class="accountTopGrid">
         <form id="avatarUploadForm" action="<?= BASE_URL ?>auth/account.php" method="POST" enctype="multipart/form-data" style="display: none;">
             <input type="hidden" name="action" value="upload_avatar">
@@ -241,7 +241,7 @@ include BASE_PATH . 'includes/header.php';
         <?php endif; ?>
     </div>
 
-    <!-- Articles Postés -->
+    
     <div class="accountSectionHeader">
         <h2>Articles Postés</h2>
         <?php if ($is_own_account): ?>
@@ -263,7 +263,7 @@ include BASE_PATH . 'includes/header.php';
         <?php endforeach; ?>
     </div>
 
-    <!-- Commandes -->
+    
     <?php if ($is_own_account): ?>
     <div class="accountSectionHeader">
         <h2>Commandes</h2>
@@ -301,7 +301,7 @@ include BASE_PATH . 'includes/header.php';
 
 </div>
 
-<!-- Modal Recharge -->
+
 <div id="rechargeModal" class="rechargeModal">
     <div class="rechargeModalContent">
         <span class="closeRechargeModal" onclick="closeRechargeModal()">&times;</span>
@@ -314,7 +314,7 @@ include BASE_PATH . 'includes/header.php';
     </div>
 </div>
 
-<!-- Modal Edit Info -->
+
 <div id="editInfoModal" class="rechargeModal">
     <div class="rechargeModalContent" style="max-width: 600px; padding: 1.5rem;">
         <span class="closeRechargeModal" onclick="closeEditInfoModal()">&times;</span>
@@ -369,7 +369,7 @@ include BASE_PATH . 'includes/header.php';
     </div>
 </div>
 
-<!-- Modal Delete Account -->
+
 <div id="deleteAccountModal" class="rechargeModal">
     <div class="rechargeModalContent">
         <span class="closeRechargeModal" onclick="closeDeleteAccountModal()">&times;</span>
@@ -386,7 +386,7 @@ include BASE_PATH . 'includes/header.php';
 <script>
     function openRechargeModal() {
         document.getElementById('rechargeModal').classList.add('active');
-        document.body.style.overflow = 'hidden'; // Empêche le scroll derrière
+        document.body.style.overflow = 'hidden'; 
     }
 
     function closeRechargeModal() {
@@ -414,7 +414,7 @@ include BASE_PATH . 'includes/header.php';
         document.body.style.overflow = 'auto';
     }
 
-    // Fermer si clic en dehors
+    
     document.querySelectorAll('.rechargeModal').forEach(modal => {
         modal.addEventListener('click', function(e) {
             if (e.target === this) {

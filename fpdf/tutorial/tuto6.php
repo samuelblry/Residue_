@@ -10,14 +10,14 @@ protected $HREF = '';
 
 function WriteHTML($html)
 {
-	// HTML parser
+	
 	$html = str_replace("\n",' ',$html);
 	$a = preg_split('/<(.*)>/U',$html,-1,PREG_SPLIT_DELIM_CAPTURE);
 	foreach($a as $i=>$e)
 	{
 		if($i%2==0)
 		{
-			// Text
+			
 			if($this->HREF)
 				$this->PutLink($this->HREF,$e);
 			else
@@ -25,12 +25,12 @@ function WriteHTML($html)
 		}
 		else
 		{
-			// Tag
+			
 			if($e[0]=='/')
 				$this->CloseTag(strtoupper(substr($e,1)));
 			else
 			{
-				// Extract attributes
+				
 				$a2 = explode(' ',$e);
 				$tag = strtoupper(array_shift($a2));
 				$attr = array();
@@ -47,7 +47,7 @@ function WriteHTML($html)
 
 function OpenTag($tag, $attr)
 {
-	// Opening tag
+	
 	if($tag=='B' || $tag=='I' || $tag=='U')
 		$this->SetStyle($tag,true);
 	if($tag=='A')
@@ -58,7 +58,7 @@ function OpenTag($tag, $attr)
 
 function CloseTag($tag)
 {
-	// Closing tag
+	
 	if($tag=='B' || $tag=='I' || $tag=='U')
 		$this->SetStyle($tag,false);
 	if($tag=='A')
@@ -67,7 +67,7 @@ function CloseTag($tag)
 
 function SetStyle($tag, $enable)
 {
-	// Modify style and select corresponding font
+	
 	$this->$tag += ($enable ? 1 : -1);
 	$style = '';
 	foreach(array('B', 'I', 'U') as $s)
@@ -80,7 +80,7 @@ function SetStyle($tag, $enable)
 
 function PutLink($URL, $txt)
 {
-	// Put a hyperlink
+	
 	$this->SetTextColor(0,0,255);
 	$this->SetStyle('U',true);
 	$this->Write(5,$txt,$URL);
@@ -94,7 +94,7 @@ $html = 'You can now easily print text mixing different styles: <b>bold</b>, <i>
 text, such as <a href="http://www.fpdf.org">www.fpdf.org</a>, or on an image: click on the logo.';
 
 $pdf = new PDF();
-// First page
+
 $pdf->AddPage();
 $pdf->SetFont('Arial','',20);
 $pdf->Write(5,"To find out what's new in this tutorial, click ");
@@ -102,7 +102,7 @@ $pdf->SetFont('','U');
 $link = $pdf->AddLink();
 $pdf->Write(5,'here',$link);
 $pdf->SetFont('');
-// Second page
+
 $pdf->AddPage();
 $pdf->SetLink($link);
 $pdf->Image('logo.png',10,12,30,0,'','http://www.fpdf.org');

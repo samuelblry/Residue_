@@ -1,6 +1,4 @@
-/* =========================================
-   PAGE CATALOGUE / SHOP
-   ========================================= */
+
 
 .shopCatalogContainer {
     width: 100%;
@@ -9,7 +7,7 @@
     min-height: 80vh;
 }
 
-/* SUB NAVIGATION */
+
 .catalogSubNav {
     border-bottom: 1px solid #e7e5e4;
     padding: 1rem 0;
@@ -39,7 +37,7 @@
     color: #a8a29e;
 }
 
-/* HEADER */
+
 .catalogHeader {
     display: flex;
     justify-content: space-between;
@@ -106,7 +104,7 @@
     background-color: #333;
 }
 
-/* GRID */
+
 .catalogGrid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

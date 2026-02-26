@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Gestion de la catégorie
+
 $categoryFilter = "";
 $categoryTitle = "MES FAVORIS";
 $selectedSizes = [];
@@ -28,7 +28,7 @@ if (isset($_GET['sizes']) && is_array($_GET['sizes'])) {
     $selectedSizes = $_GET['sizes'];
 }
 
-// Construction de la requête (Jointure avec stock et vérification de stock global)
+
 $sql = "SELECT Article.id, Article.name, Article.price, Image.url AS image_url 
         FROM Article 
         INNER JOIN favorite ON Article.id = favorite.article_id AND favorite.user_id = ?
@@ -59,7 +59,7 @@ if (!empty($selectedSizes)) {
     }
 }
 
-// Gestion du tri
+
 $sortOrder = "date_desc";
 if (isset($_GET['sort'])) {
     $sortParam = trim($_GET['sort']);
@@ -99,7 +99,7 @@ if ($resultArticles && $resultArticles->num_rows > 0) {
     }
 }
 
-// Fetch user favorites for toggle state
+
 $userFavorites = [];
 if (isset($_SESSION['user_id'])) {
     $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));
@@ -115,7 +115,7 @@ include BASE_PATH . 'includes/header.php';
 
 <div class="shopCatalogContainer">
 
-    <!-- En-tête de la page catalogue -->
+    
     <div class="catalogHeader">
         <div class="catalogHeaderLeft">
             <h1 class="catalogTitle"><?php echo htmlspecialchars($categoryTitle); ?></h1>
@@ -123,7 +123,7 @@ include BASE_PATH . 'includes/header.php';
         </div>
         <div class="catalogHeaderRight">
             <form id="sortForm" method="GET" style="margin: 0;">
-                <!-- Conservation des filtres existants dans l'URL -->
+                
                 <?php if ($categoryFilter !== ""): ?>
                     <input type="hidden" name="category" value="<?php echo htmlspecialchars($categoryFilter); ?>">
                 <?php endif; ?>
@@ -142,7 +142,7 @@ include BASE_PATH . 'includes/header.php';
         </div>
     </div>
 
-    <!-- Grille des produits -->
+    
     <div class="catalogGrid">
         <?php if(!empty($articles)): ?>
             <?php foreach($articles as $article): ?>
@@ -159,7 +159,7 @@ include BASE_PATH . 'includes/header.php';
                         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                             <span class="catalogPrice"><?php echo number_format($article['price'], 2, ',', ' '); ?> EUR</span>
                             <?php 
-                                // On the favorites page, ALL articles displayed are favorites by definition
+                                
                                 $isFav = true;
                             ?>
                             <button type="button" class="favoriteBtn" data-id="<?php echo $article['id']; ?>" onclick="toggleFavorite(event, <?php echo $article['id']; ?>)">
@@ -179,10 +179,10 @@ include BASE_PATH . 'includes/header.php';
     </div>
 </div>
 
-<!-- L'overlay sombre pour la sidebar -->
+
 <div id="filterOverlay" class="filterOverlay"></div>
 
-<!-- La sidebar de filtres -->
+
 <aside id="filterSidebar" class="filterSidebar">
     <div class="filterSidebarHeader">
         <h2 style="font-weight: 700; text-transform: uppercase;">FILTRER</h2>

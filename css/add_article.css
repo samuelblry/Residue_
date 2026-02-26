@@ -27,11 +27,11 @@
 }
 
 .articleImagesGrid {
-    /* La grille sera activée par JS une fois qu'il y aura des images */
+    
     display: block;
 }
 
-/* Quand la grille est activée par JS */
+
 .articleImagesGrid[style*="display: grid"] {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -51,7 +51,7 @@
     background-color: #e5e7eb;
 }
 
-/* Bouton pour retirer une image uploadée (Affiché au survol) */
+
 .removeImageBtn {
     position: absolute;
     top: 10px;
@@ -78,7 +78,7 @@
 
 .removeImageBtn:hover {
     background: rgba(220, 38, 38, 0.9);
-    /* Rouge vif au survol du bouton */
+    
 }
 
 .imageDropzone {
@@ -96,7 +96,7 @@
 
 .dropzoneContent svg {
     color: #fff;
-    /* La taille sera de 60x60 par défaut (Solo), ou pilotée par le JS/inline */
+    
 }
 
 .soloDropzone {
@@ -136,7 +136,7 @@
     font-family: 'Inter', sans-serif;
     color: #111;
     width: 60%;
-    /* Pas toute la largeur par défaut */
+    
 }
 
 .editableInput::placeholder {
@@ -162,7 +162,7 @@
     margin-bottom: 0;
 }
 
-/* Enlever les flèches des inputs number sur webkit/firefox */
+
 .priceInput::-webkit-outer-spin-button,
 .priceInput::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -234,7 +234,7 @@
     font-weight: 700;
 }
 
-/* Grille de sélection des tailles */
+
 .sizeOptionsSelect {
     display: flex;
     gap: 0.5rem;
@@ -246,7 +246,7 @@
     width: 40px;
     height: 40px;
     border: 1px solid #d1d5db;
-    /* Gris clair par défaut (désélectionné) */
+    
     background: transparent;
     font-size: 0.85rem;
     color: #d1d5db;
@@ -360,7 +360,7 @@
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    /* Espace entre les deux boutons */
+    
     margin-top: 4rem;
     margin-bottom: 4rem;
 }
@@ -376,7 +376,7 @@
     justify-content: center;
     transition: all 0.3s;
     min-width: 250px;
-    /* Largeur uniforme pour les deux boutons */
+    
     letter-spacing: 0.05em;
     font-weight: 700;
 }

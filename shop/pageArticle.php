@@ -2,11 +2,11 @@
 if(session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/../includes/db.php';
 
-// 1. On récupère l'ID de l'article dans l'URL (ex: pageArticle.php?id=1)
-// Si aucun ID n'est passé, on affiche l'article 1 par défaut
+
+
 $article_id = isset($_GET['id']) ? intval($_GET['id']) : 1;
 
-// 2. On récupère les infos de l'article (Titre, Prix, Description) avec le vendeur
+
 $queryArticle = $mysqli->query("
     SELECT a.*, u.username as author_name, u.role as author_role 
     FROM Article a 
@@ -14,14 +14,14 @@ $queryArticle = $mysqli->query("
     WHERE a.id = $article_id
 ");
 
-// Si l'article n'existe pas, on renvoie vers l'accueil
+
 if ($queryArticle->num_rows === 0) {
     header("Location: " . BASE_URL . "index.php");
     exit();
 }
 $article = $queryArticle->fetch_assoc();
 
-// Déterminer le nom du vendeur à afficher
+
 $vendorName = "RESIDUE_";
 $vendorLink = "";
 if (!empty($article['author_name']) && $article['author_role'] !== 'admin') {
@@ -29,16 +29,16 @@ if (!empty($article['author_name']) && $article['author_role'] !== 'admin') {
     $vendorLink = BASE_URL . 'auth/account.php?id=' . $article['author_id'];
 }
 
-// 2b. On récupère les stocks pour cet article
+
 $queryStock = $mysqli->query("SELECT * FROM stock WHERE article_id = $article_id");
 $stock = $queryStock->fetch_assoc();
 if (!$stock) {
-    // S'il n'y a pas d'entrée de stock, on initialise à 0 pour éviter des erreurs
+    
     $stock = ['quant_xs' => 0, 'quant_s' => 0, 'quant_m' => 0, 'quant_l' => 0, 'quant_xl' => 0];
 }
 
-// 3. On récupère TOUTES les images liées à cet article
-// On met l'image principale (is_main = 1) en premier
+
+
 $queryImages = $mysqli->query("SELECT url FROM Image WHERE article_id = $article_id ORDER BY is_main DESC, id ASC");
 
 $images = [];
@@ -46,10 +46,10 @@ while ($img = $queryImages->fetch_assoc()) {
     $images[] = $img['url'];
 }
 
-// On encode les images en JSON pour pouvoir les donner au JavaScript du carrousel
+
 $imagesJson = json_encode($images);
 
-// Vérifier si l'article est en favori
+
 $isFav = false;
 if (isset($_SESSION['user_id'])) {
     $favCheck = $mysqli->query("SELECT id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']) . " AND article_id = $article_id");
@@ -62,7 +62,7 @@ include BASE_PATH . 'includes/header.php';
 ?>
 
 <section class="articlePageContainer">
-    <!-- Colonne de gauche : Grille d'images -->
+    
     <div class="articleImagesGrid">
         <?php
         if (!empty($images)) {
@@ -75,7 +75,7 @@ include BASE_PATH . 'includes/header.php';
         ?>
     </div>
 
-    <!-- Colonne de droite : Détails collants -->
+    
     <div class="articleDetailsStickyContainer">
         <div class="articleDetailsSticky">
             <h1 class="productTitle"><?php echo nl2br(htmlspecialchars($article['name'])); ?></h1>
@@ -169,7 +169,7 @@ include BASE_PATH . 'includes/header.php';
 </section>
 
 <?php
-// Récupérer 5 articles au hasard pour les suggestions, en excluant l'article courant
+
 $suggestions = [];
 $suggestQuery = "SELECT article.id, article.name, article.price, 
                         (SELECT url FROM image WHERE article_id = article.id AND is_main = 1 LIMIT 1) as image_url 
@@ -184,7 +184,7 @@ if ($suggestResult && $suggestResult->num_rows > 0) {
 }
 ?>
 <?php
-// Fetch user favorites for suggestions toggle state
+
 $userFavorites = [];
 if (isset($_SESSION['user_id'])) {
     $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));
@@ -193,7 +193,7 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 ?>
-<!-- Section Suggestions -->
+
 <section class="suggestionsSection">
     <h3 class="suggestionsTitle">SUGGESTIONS</h3>
     <div class="suggestionsGrid">
@@ -240,7 +240,7 @@ if (isset($_SESSION['user_id'])) {
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        // Gestion des tailles
+        
         const sizeBtns = document.querySelectorAll('.sizeBtn:not(.out-of-stock)');
         const selectedSizeInput = document.getElementById('selectedSizeInput');
         
@@ -252,12 +252,12 @@ if (isset($_SESSION['user_id'])) {
             });
         });
 
-        // Gestion de l'icône de l'accordéon (+ / -)
+        
         const accordions = document.querySelectorAll('.accordion');
         accordions.forEach(acc => {
             acc.addEventListener('click', (e) => {
-                // on details click, toggle icon. Details toggles after click event.
-                // Using a short timeout to check open state after toggle
+                
+                
                 setTimeout(() => {
                     const icon = acc.querySelector('.icon');
                     if (icon) {

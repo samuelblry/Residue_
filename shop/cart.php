@@ -11,14 +11,14 @@ $user_id = $_SESSION['user_id'];
 $error = "";
 $success = "";
 
-// Gestion de l'ajout au panier ou suppression
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['action']) && $_POST['action'] === 'add') {
         $article_id = intval($_POST['article_id']);
         $quantity = intval($_POST['quantity'] ?? 1);
         $size = isset($_POST['size']) ? strtoupper(trim(mysqli_real_escape_string($mysqli, $_POST['size']))) : 'M';
 
-        // 1. Validation du stock selon la taille sélectionnée
+        
         $size_column = 'quant_' . strtolower($size);
         $valid_columns = ['quant_xs', 'quant_s', 'quant_m', 'quant_l', 'quant_xl'];
         
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($available_stock < $quantity) {
                     $error = "Stock insuffisant pour la taille $size.";
                 } else {
-                    // 2. Vérifier si l'article (avec cette taille spécifique) est déjà dans le panier
+                    
                     $check = $mysqli->query("SELECT id, quantity FROM cart WHERE user_id = $user_id AND article_id = $article_id AND size = '$size'");
                     if ($check->num_rows > 0) {
                         $row = $check->fetch_assoc();
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Récupérer les articles du panier
+
 $sql = "SELECT cart.id as cart_id, cart.quantity, cart.size, article.id as article_id, article.name, article.price, 
                (SELECT url FROM image WHERE article_id = article.id AND is_main = 1 LIMIT 1) as image_url 
         FROM cart 
@@ -103,7 +103,7 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
-// Récupérer le solde de l'utilisateur
+
 $userBalance = 0;
 $resUser = $mysqli->query("SELECT balance FROM user WHERE id=$user_id");
 if ($resUser && $resUser->num_rows > 0) {
@@ -111,7 +111,7 @@ if ($resUser && $resUser->num_rows > 0) {
     $userBalance = floatval($userRow['balance']);
 }
 
-// Générer des frais de livraison aléatoires (sauvegardés en session pour ne pas changer à chaque rechargement de page)
+
 if (!isset($_SESSION['delivery_fee'])) {
     $possible_fees = [5.99, 6.99, 7.99, 8.99, 9.99];
     $_SESSION['delivery_fee'] = $possible_fees[array_rand($possible_fees)];
@@ -121,7 +121,7 @@ $delivery_fee = $_SESSION['delivery_fee'];
 $total_with_delivery = empty($cartItems) ? 0 : $total + $delivery_fee;
 $is_balance_sufficient = ($userBalance >= $total_with_delivery);
 
-// Récupérer 5 articles au hasard pour les suggestions
+
 $suggestions = [];
 $suggestQuery = "SELECT article.id, article.name, article.price, 
                         (SELECT url FROM image WHERE article_id = article.id AND is_main = 1 LIMIT 1) as image_url 
@@ -137,7 +137,7 @@ if ($suggestResult && $suggestResult->num_rows > 0) {
 include BASE_PATH . 'includes/header.php';
 ?>
 
-<!-- HTML structur -->
+
 <div class="contactContainer" style="max-width: 1500px; padding: 2rem 5%;">
     <h1 class="titleFormular" style="text-align: left; margin-bottom: 2rem; font-size: 2rem;">PANIER</h1>
 
@@ -152,14 +152,14 @@ include BASE_PATH . 'includes/header.php';
         <p>Votre panier est vide. <a href="<?= BASE_URL ?>index.php" style="text-decoration: underline;">Retour à la boutique</a></p>
     <?php else: ?>
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; align-items: start;">
-            <!-- Colonne de gauche : Articles -->
+            
             <div style="display: flex; flex-direction: column; border-top: 1px solid #e7e5e4;">
                 <?php foreach($cartItems as $item): ?>
                     <div style="display: flex; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid #e7e5e4; align-items: center;">
-                        <!-- Image article -->
+                        
                         <img src="<?= BASE_URL . htmlspecialchars($item['image_url'] ?? 'img/default.jpg') ?>" style="width: 100px; height: 130px; object-fit: cover; background-color: #f5f5f4;" alt="">
                         
-                        <!-- Infos article -->
+                        
                         <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
                             <h3 style="text-transform: uppercase; font-weight: bold; font-size: 0.9rem; margin-bottom: 0.5rem;"><?php echo htmlspecialchars($item['name']); ?></h3>
                             <p style="font-size: 0.75rem; color: #57534e; text-transform: uppercase; margin-bottom: 0.2rem;">Taille : <?php echo htmlspecialchars($item['size'] ?? 'XX'); ?></p>
@@ -167,7 +167,7 @@ include BASE_PATH . 'includes/header.php';
                             <p style="font-weight: bold; font-size: 0.8rem; margin-top: auto;"><?php echo number_format($item['price'], 2, ',', ' '); ?> EUR</p>
                         </div>
                         
-                        <!-- Actions de quantité -->
+                        
                         <div style="border: 1px solid #d6d3d1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.2rem 0.5rem; width: 80px;">
                             <form method="POST" action="<?= BASE_URL ?>shop/cart.php" style="margin: 0;">
                                 <input type="hidden" name="action" value="update_quantity">
@@ -186,12 +186,12 @@ include BASE_PATH . 'includes/header.php';
                             </form>
                         </div>
                         
-                        <!-- Prix total article -->
+                        
                         <div style="font-weight: bold; font-size: 0.9rem; width: 80px; text-align: right; margin-right: 1.5rem;">
                             <?php echo number_format($item['price'] * $item['quantity'], 2, ',', ' '); ?> EUR
                         </div>
 
-                        <!-- Bouton supprimer au design minimaliste (X) -->
+                        
                         <form method="POST" action="<?= BASE_URL ?>shop/cart.php" style="margin: 0;">
                             <input type="hidden" name="action" value="remove">
                             <input type="hidden" name="cart_id" value="<?php echo $item['cart_id']; ?>">
@@ -201,7 +201,7 @@ include BASE_PATH . 'includes/header.php';
                 <?php endforeach; ?>
             </div>
 
-            <!-- Colonne de droite : Récapitulatif -->
+            
             <div style="position: sticky; top: 100px;">
                 <h3 style="font-weight: bold; margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.9rem;">Récapitulatif</h3>
                 
@@ -239,7 +239,7 @@ include BASE_PATH . 'includes/header.php';
     <?php endif; ?>
 
 <?php
-// Fetch user favorites for suggestions toggle state
+
 $userFavorites = [];
 if (isset($_SESSION['user_id'])) {
     $favQuery = $mysqli->query("SELECT article_id FROM favorite WHERE user_id = " . intval($_SESSION['user_id']));
@@ -248,7 +248,7 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 ?>
-    <!-- Suggestions (affiché même si panier vide) -->
+    
     <section class="suggestionsSection" style="padding: 6rem 0 2rem 0; background-color: transparent;">
         <h3 class="suggestionsTitle">SUGGESTIONS</h3>
         <div class="suggestionsGrid">

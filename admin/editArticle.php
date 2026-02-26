@@ -12,7 +12,7 @@ $error = "";
 $success = "";
 $article_id = 0;
 
-// On récupère l'ID soit en POST soit en GET pour plus de flexibilité (ex: lien depuis la pageArticle ou account)
+
 if (isset($_POST['article_id'])) {
     $article_id = intval($_POST['article_id']);
 } elseif (isset($_GET['id'])) {
@@ -26,7 +26,7 @@ if ($article_id === 0) {
 
 $isAdmin = (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') ? 1 : 0;
 
-// Vérifier les droits
+
 $checkAuth = $mysqli->query("SELECT * FROM article WHERE id=$article_id AND (author_id=$user_id OR $isAdmin=1)");
 if ($checkAuth->num_rows === 0) {
     header("Location: " . BASE_URL . "auth/account.php");
@@ -34,30 +34,30 @@ if ($checkAuth->num_rows === 0) {
 }
 $article = $checkAuth->fetch_assoc();
 
-// Traitement du formulaire POST : Mise à jour ou Suppression
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
     
-    // ACTION : SUPPRIMER
+    
     if ($_POST['action'] === 'delete_article') {
         $mysqli->query("DELETE FROM article WHERE id=$article_id");
         header("Location: " . BASE_URL . "auth/account.php");
         exit();
     }
     
-    // ACTION : METTRE A JOUR
+    
     if ($_POST['action'] === 'update_article') {
         $name = mysqli_real_escape_string($mysqli, $_POST['name']);
         $description = mysqli_real_escape_string($mysqli, $_POST['description']);
         $price = floatval($_POST['price']);
         $category = isset($_POST['category']) ? mysqli_real_escape_string($mysqli, $_POST['category']) : $article['category'];
         
-        // Mettre à jour l'article de base
+        
         $stmt = $mysqli->prepare("UPDATE article SET name=?, description=?, price=?, category=? WHERE id=?");
         $stmt->bind_param("ssdsi", $name, $description, $price, $category, $article_id);
         
         if ($stmt->execute()) {
             $success = "L'article a été mis à jour avec succès !";
-            // Rafraichir les données locales pour l'affichage
+            
             $article['name'] = $name;
             $article['description'] = $description;
             $article['price'] = $price;
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
             $error = "Erreur lors de la mise à jour des infos principales.";
         }
 
-        // Mettre à jour les stocks
+        
         $stocks = isset($_POST['stock']) ? $_POST['stock'] : [];
         $quant_xs = isset($stocks['XS']) ? intval($stocks['XS']) : 0;
         $quant_s = isset($stocks['S']) ? intval($stocks['S']) : 0;
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         $quant_l = isset($stocks['L']) ? intval($stocks['L']) : 0;
         $quant_xl = isset($stocks['XL']) ? intval($stocks['XL']) : 0;
         
-        // Vérifier si une ligne de stock existe déjà
+        
         $checkStock = $mysqli->query("SELECT id FROM stock WHERE article_id=$article_id");
         if ($checkStock->num_rows > 0) {
             $stmt_stock = $mysqli->prepare("UPDATE stock SET quant_xs=?, quant_s=?, quant_m=?, quant_l=?, quant_xl=? WHERE article_id=?");
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
             $stmt_stock->execute();
         }
 
-        // Gestion de la suppression des fichiers physiques des anciennes images supprimées
+        
         if (!empty($_POST['deleted_images'])) {
             $deleted_ids = explode(',', $_POST['deleted_images']);
             foreach ($deleted_ids as $del_id) {
@@ -96,20 +96,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                     if ($imgRes->num_rows > 0) {
                         $imgRow = $imgRes->fetch_assoc();
                         if (file_exists($imgRow['url'])) {
-                            unlink($imgRow['url']); // Supprimer le fichier physiquement
+                            unlink($imgRow['url']); 
                         }
                     }
                 }
             }
         }
 
-        // On efface entièrement les enregistrements d'images en base de données pour cet article
+        
         $mysqli->query("DELETE FROM image WHERE article_id=$article_id");
 
-        // Récupérer l'ordre final
+        
         $finalOrder = [];
         if (!empty($_POST['final_image_order'])) {
-            // format: "existing:img/art.webp,new:0,existing:img/art2.webp,new:1..."
+            
             $finalOrder = explode(',', $_POST['final_image_order']);
         }
 
@@ -164,8 +164,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
     }
 }
 
-// Récupérer les données pour l'affichage (après mise à jour éventuelle)
-// Stocks :
+
+
 $queryStock = $mysqli->query("SELECT * FROM stock WHERE article_id = $article_id");
 if ($queryStock->num_rows > 0) {
     $currentStock = $queryStock->fetch_assoc();
@@ -173,7 +173,7 @@ if ($queryStock->num_rows > 0) {
     $currentStock = ['quant_xs' => 0, 'quant_s' => 0, 'quant_m' => 0, 'quant_l' => 0, 'quant_xl' => 0];
 }
 
-// Images :
+
 $queryImages = $mysqli->query("SELECT * FROM image WHERE article_id = $article_id ORDER BY is_main DESC, id ASC");
 $existingImages = [];
 while ($img = $queryImages->fetch_assoc()) {
@@ -187,7 +187,7 @@ while ($img = $queryImages->fetch_assoc()) {
 include BASE_PATH . 'includes/header.php';
 ?>
 
-<!-- Pop-up caché pour le formulaire de suppression afin de séparer les requêtes POST -->
+
 <form id="deleteForm" action="<?= BASE_URL ?>admin/editArticle.php" method="POST" style="display: none;">
     <input type="hidden" name="action" value="delete_article">
     <input type="hidden" name="article_id" value="<?php echo $article_id; ?>">
@@ -196,9 +196,9 @@ include BASE_PATH . 'includes/header.php';
 <form id="mainEditForm" action="<?= BASE_URL ?>admin/editArticle.php" method="POST" enctype="multipart/form-data" class="addArticleContainer">
     <input type="hidden" name="action" value="update_article">
     <input type="hidden" name="article_id" value="<?php echo $article_id; ?>">
-    <!-- Champ caché qui contiendra les IDs des images supprimées séparés par des virgules -->
+    
     <input type="hidden" id="deletedImagesInput" name="deleted_images" value="">
-    <!-- Champ caché qui contiendra l'ordre final de toutes les images -->
+    
     <input type="hidden" id="finalImageOrderInput" name="final_image_order" value="">
 
     <h1 class="addArticleMainTitle">MODIFIER L'ARTICLE #<?php echo $article_id; ?></h1>
@@ -235,21 +235,21 @@ include BASE_PATH . 'includes/header.php';
                         </svg>
                     </div>
                 </div>
-                <!-- Placeholder initial vide -->
+                
                 <div class="gridImageWrapper placeholderImage" id="initialPlaceholder"></div>
             </div>
         </div>
 
-        <!-- Colonne Droite : Formulaire -->
+        
         <div class="addArticleRight">
             
             <div class="editGroup">
-                <!-- Inputs mockés en "plain text" -->
+                
                 <input type="text" name="name" class="editableInput titleInput" placeholder="TITRE DE L'ARTICLE" value="<?php echo htmlspecialchars($article['name']); ?>" required>
                 <span class="editIcon">✎</span>
             </div>
             <div class="editGroup priceWrapper">
-                <!-- Prix avec EUR fixe à côté -->
+                
                 <input type="number" name="price" step="0.01" class="editableInput priceInput" placeholder="XX" value="<?php echo htmlspecialchars($article['price']); ?>" required>
                 <span class="currencySuffix">EUR</span>
             </div>
@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Gestion de l'input de fichier visible
+    
     fileInput.addEventListener('change', function() {
         if (!this.files || this.files.length === 0) return;
         Array.from(this.files).forEach(file => {
@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", function() {
         updateInputsAndRender();
     });
 
-    // Drag-and-drop basic functions
+    
     let dragStartIndex;
 
     function handleDragStart(e) {
@@ -516,12 +516,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Rendu initial de la grille combinée
+    
     updateInputsAndRender();
     const sizeBtns = document.querySelectorAll('.sizeBtn.selectable');
     const noSizeMsg = document.getElementById('noSizeSelectedMsg');
     
-    // Fonctionnalité de sélection de taille
+    
     sizeBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             this.classList.toggle('selected'); 
@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // 3. Gestion des accordéons
+    
     const accordions = document.querySelectorAll('.accordionHeader');
     accordions.forEach(acc => {
         acc.addEventListener('click', function() {
@@ -558,10 +558,10 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Rendu initial déjà géré
+    
 });
 
-// Confirmation de suppression
+
 function confirmDelete() {
     if (confirm('Êtes-vous sûr de vouloir supprimer définitivement cet article ? Cette action est irréversible.')) {
         document.getElementById('deleteForm').submit();

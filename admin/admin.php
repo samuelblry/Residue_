@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
 $success = "";
 $error = "";
 
-// Actions de suppression
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['action']) && $_POST['action'] === 'delete_user') {
         $id = intval($_POST['user_id']);
-        if ($id !== $_SESSION['user_id']) { // Empêcher l'admin de se supprimer
+        if ($id !== $_SESSION['user_id']) { 
             $mysqli->query("DELETE FROM user WHERE id = $id");
             $success = "Utilisateur supprimé.";
         }
@@ -25,21 +25,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Récupérer tous les utilisateurs
+
 $resUsers = $mysqli->query("SELECT id, username, email, role, balance FROM user ORDER BY id DESC");
 $users = [];
 if ($resUsers) {
     while($row = $resUsers->fetch_assoc()) $users[] = $row;
 }
 
-// Récupérer tous les articles
+
 $resArticles = $mysqli->query("SELECT id, name, price, author_id FROM article ORDER BY publish_date DESC");
 $articles = [];
 if ($resArticles) {
     while($row = $resArticles->fetch_assoc()) $articles[] = $row;
 }
 
-// Récupérer toutes les factures
+
 $resInvoices = $mysqli->query("SELECT invoice.id, invoice.transaction_date, invoice.amount, invoice.billing_address, invoice.billing_city, invoice.billing_zipcode, user.username FROM invoice JOIN user ON invoice.user_id = user.id ORDER BY invoice.transaction_date DESC");
 $invoices = [];
 if ($resInvoices) {
