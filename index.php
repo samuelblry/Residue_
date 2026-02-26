@@ -133,27 +133,22 @@ include 'includes/header.php';
             <?php endif; ?>
         </div>
 
-        <div class="productsGrid">
+        <div class="catalogGrid">
             <?php if (!empty($articlesNew)): ?>
                 <?php foreach ($articlesNew as $article): ?>
-                    <div class="productCard">
-                        <div class="cardImage">
-                            <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>">
-                                <span class="tagRed">New</span>
-                                <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['image_url'] ?? 'img/default.jpg'); ?>"
-                                    class="imgFront" alt="<?php echo htmlspecialchars($article['name']); ?>">
-                                <?php if (!empty($article['hover_image_url'])): ?>
-                                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['hover_image_url']); ?>" class="imgBack"
-                                        alt="<?php echo htmlspecialchars($article['name']); ?> porté">
-                                <?php endif; ?>
-                            </a>
+                    <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>" class="catalogCard">
+                        <div class="catalogImgWrapper" style="position: relative;">
+                            <span class="tagRed" style="position: absolute; top: 10px; left: 10px; z-index: 10;">New</span>
+                            <?php if(!empty($article['image_url'])): ?>
+                                <img src="<?= BASE_URL . htmlspecialchars($article['image_url']) ?>" alt="<?php echo htmlspecialchars($article['name']); ?>">
+                            <?php else: ?>
+                                <div class="catalogPlaceholder"></div>
+                            <?php endif; ?>
                         </div>
-                        <div class="cardInfo">
-                            <div>
-                                <h3 class="articleName"><?php echo htmlspecialchars($article['name']); ?></h3>
-                            </div>
+                        <div class="catalogInfo">
+                            <h3 class="catalogName"><?php echo htmlspecialchars($article['name']); ?></h3>
                             <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                <span class="articlePrice"><?php echo number_format($article['price'], 2, ',', ' '); ?>€</span>
+                                <span class="catalogPrice"><?php echo number_format($article['price'], 2, ',', ' '); ?> EUR</span>
                                 <?php $isFav = in_array($article['id'], $userFavorites); ?>
                                 <button type="button" class="favoriteBtn" data-id="<?php echo $article['id']; ?>" onclick="toggleFavorite(event, <?php echo $article['id']; ?>)">
                                     <?php if ($isFav): ?>
@@ -164,7 +159,7 @@ include 'includes/header.php';
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>Aucune nouveauté cette semaine.</p>
@@ -232,27 +227,22 @@ include 'includes/header.php';
             </div>
         </div>
 
-        <div class="productsGrid">
+        <div class="catalogGrid">
             <?php if (!empty($articlesBestsellers)): ?>
                 <?php foreach ($articlesBestsellers as $article): ?>
-                    <div class="productCard">
-                        <div class="cardImage">
-                            <span class="tagRed">Bestseller</span>
-                            <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>">
-                                <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['image_url'] ?? 'img/default.jpg'); ?>"
-                                    class="imgFront" alt="<?php echo htmlspecialchars($article['name']); ?>">
-                                <?php if (!empty($article['hover_image_url'])): ?>
-                                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($article['hover_image_url']); ?>" class="imgBack"
-                                        alt="<?php echo htmlspecialchars($article['name']); ?> porté">
-                                <?php endif; ?>
-                            </a>
+                    <a href="<?= BASE_URL ?>shop/pageArticle.php?id=<?php echo $article['id']; ?>" class="catalogCard">
+                        <div class="catalogImgWrapper" style="position: relative;">
+                            <span class="tagRed" style="position: absolute; top: 10px; left: 10px; z-index: 10;">Bestseller</span>
+                            <?php if(!empty($article['image_url'])): ?>
+                                <img src="<?= BASE_URL . htmlspecialchars($article['image_url']) ?>" alt="<?php echo htmlspecialchars($article['name']); ?>">
+                            <?php else: ?>
+                                <div class="catalogPlaceholder"></div>
+                            <?php endif; ?>
                         </div>
-                        <div class="cardInfo">
-                            <div>
-                                <h3 class="articleName"><?php echo htmlspecialchars($article['name']); ?></h3>
-                            </div>
+                        <div class="catalogInfo">
+                            <h3 class="catalogName"><?php echo htmlspecialchars($article['name']); ?></h3>
                             <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                <span class="articlePrice"><?php echo number_format($article['price'], 2, ',', ' '); ?>€</span>
+                                <span class="catalogPrice"><?php echo number_format($article['price'], 2, ',', ' '); ?> EUR</span>
                                 <?php $isFav = in_array($article['id'], $userFavorites); ?>
                                 <button type="button" class="favoriteBtn" data-id="<?php echo $article['id']; ?>" onclick="toggleFavorite(event, <?php echo $article['id']; ?>)">
                                     <?php if ($isFav): ?>
@@ -263,7 +253,7 @@ include 'includes/header.php';
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>Encore aucune vente à afficher.</p>
