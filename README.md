@@ -34,6 +34,10 @@ Le projet utilise plusieurs tables relationnelles pour gérer la boutique :
 * `cart` : Panier temporaire des utilisateurs.
 * `invoice` & `invoice_item` : Historique des commandes et facturation.
 
+## 📷 Présentation
+
+![](presentation.gif)
+
 ## ⚙️ Installation Globale
 
 1. **Prérequis :** Serveur local (ex: XAMPP, WAMP, MAMP) comprenant Apache et MySQL.
